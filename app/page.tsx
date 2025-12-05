@@ -38,53 +38,52 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center p-6 safe-top safe-bottom">
-      <div className="w-full max-w-sm">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">가족 게임방</h1>
-          <p className="text-base text-gray-600">이현이네 × 채이네</p>
+    <div className="layout-container layout-center safe-area">
+      <div className="section-gap">
+        {/* 헤더 섹션 */}
+        <div className="text-center py-4">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">가족 게임방</h1>
+          <p className="text-gray-500">이현이네 × 채이네 가족을 위한<br/>즐거운 게임 공간 🎮</p>
         </div>
 
+        {/* 로그인 카드 */}
         <div className="card p-6">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-1.5">로그인</h2>
-            <p className="text-sm text-gray-600">게임에 참여하세요</p>
-          </div>
+          <form onSubmit={handleLogin} className="form-gap">
+            <div className="content-gap">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2 ml-1">
+                  이메일
+                </label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="input"
+                  placeholder="이메일을 입력하세요"
+                  autoComplete="email"
+                  inputMode="email"
+                />
+              </div>
 
-          <form onSubmit={handleLogin} className="space-y-natural">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                이메일
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="input"
-                placeholder="email@example.com"
-                autoComplete="email"
-                inputMode="email"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                비밀번호
-              </label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="input"
-                placeholder="비밀번호를 입력하세요"
-                autoComplete="current-password"
-              />
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2 ml-1">
+                  비밀번호
+                </label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="input"
+                  placeholder="비밀번호를 입력하세요"
+                  autoComplete="current-password"
+                />
+              </div>
             </div>
 
             {error && (
-              <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm">
+              <div className="p-4 bg-red-50 border border-red-100 rounded-2xl text-red-600 text-sm text-center font-medium">
                 {error}
               </div>
             )}
@@ -92,18 +91,19 @@ export default function Home() {
             <button
               type="submit"
               disabled={loading}
-              className="btn btn-primary w-full no-select disabled:opacity-50 mt-6"
+              className="btn btn-primary mt-2"
             >
-              {loading ? '로그인 중...' : '로그인'}
+              {loading ? '로그인 중...' : '로그인하기'}
             </button>
           </form>
+        </div>
 
-          <div className="mt-6 text-center text-sm text-gray-600">
-            계정이 없으신가요?{' '}
-            <Link href="/auth/signup" className="text-blue-600 font-medium">
-              회원가입
-            </Link>
-          </div>
+        {/* 회원가입 링크 */}
+        <div className="text-center">
+          <p className="text-gray-500 text-sm mb-3">아직 계정이 없으신가요?</p>
+          <Link href="/auth/signup" className="btn btn-secondary">
+            새 계정 만들기
+          </Link>
         </div>
       </div>
     </div>

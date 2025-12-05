@@ -50,54 +50,63 @@ export default function GamesPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center safe-top safe-bottom">
-        <div className="text-gray-600">로딩 중...</div>
+      <div className="layout-container layout-center">
+        <div className="text-center text-gray-500">로딩 중...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white safe-top safe-bottom">
-      {/* 헤더 */}
-      <header className="bg-white border-b sticky top-0 z-10 safe-top">
-        <div className="px-5 py-4 flex items-center justify-between">
+    <div className="layout-container safe-area">
+      <div className="flex-1 flex flex-col section-gap">
+        {/* 헤더 */}
+        <div className="flex items-center justify-between py-2">
           <div>
-            <h1 className="text-lg font-bold text-gray-900">게임 선택</h1>
-            <p className="text-xs text-gray-600 mt-0.5">{profile?.nickname}님 환영합니다!</p>
+            <h1 className="text-2xl font-bold text-gray-900">게임 선택</h1>
+            <p className="text-sm text-gray-500 mt-1">오늘 어떤 게임을 할까요?</p>
           </div>
-          <button
-            onClick={handleLogout}
-            className="text-gray-600 px-3 py-2 text-sm"
-          >
-            로그아웃
-          </button>
-        </div>
-      </header>
-
-      <main className="px-5 py-8 flex items-center justify-center min-h-[calc(100vh-80px)]">
-        <div className="w-full max-w-sm space-y-natural-lg">
-          {/* 게임 소개 */}
-          <div className="grid grid-cols-2 gap-3">
-            <Link href="/lobby?game=liar" className="card p-5 text-center no-select">
-              <div className="text-3xl mb-2">🎭</div>
-              <h3 className="font-bold text-gray-900 text-sm mb-1">라이어 게임</h3>
-              <p className="text-xs text-gray-500">숨은 라이어 찾기</p>
-            </Link>
-            <Link href="/lobby?game=mafia" className="card p-5 text-center no-select">
-              <div className="text-3xl mb-2">🔪</div>
-              <h3 className="font-bold text-gray-900 text-sm mb-1">마피아 게임</h3>
-              <p className="text-xs text-gray-500">AI 사회자와 함께</p>
-            </Link>
-          </div>
-
-          {/* 하단 정보 */}
-          <div className="text-center space-y-1 pt-2">
-            <p className="text-xs text-gray-500">3-12명이 함께 즐기는 게임</p>
-            <p className="text-xs text-gray-400">모바일에서도 편하게!</p>
+          <div className="text-right">
+            <span className="block text-sm font-semibold text-gray-900">{profile?.nickname}님</span>
+            <button onClick={handleLogout} className="text-xs text-red-500 font-medium hover:text-red-600 mt-1">
+              로그아웃
+            </button>
           </div>
         </div>
-      </main>
+
+        {/* 게임 목록 */}
+        <div className="flex-1 flex flex-col justify-center gap-4 pb-8">
+          <Link href="/lobby?game=liar" className="card p-6 flex items-center gap-5 card-interactive">
+            <div className="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center text-3xl shadow-sm">
+              🎭
+            </div>
+            <div className="flex-1">
+              <h3 className="text-xl font-bold text-gray-900 mb-1">라이어 게임</h3>
+              <p className="text-sm text-gray-500">거짓말쟁이를 찾아내세요!</p>
+            </div>
+            <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400">
+              →
+            </div>
+          </Link>
+
+          <Link href="/lobby?game=mafia" className="card p-6 flex items-center gap-5 card-interactive">
+            <div className="w-16 h-16 rounded-2xl bg-purple-50 flex items-center justify-center text-3xl shadow-sm">
+              🔪
+            </div>
+            <div className="flex-1">
+              <h3 className="text-xl font-bold text-gray-900 mb-1">마피아 게임</h3>
+              <p className="text-sm text-gray-500">AI 사회자와 함께하는 추리</p>
+            </div>
+            <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400">
+              →
+            </div>
+          </Link>
+        </div>
+
+        {/* 하단 메시지 */}
+        <div className="text-center py-6 text-xs text-gray-400 border-t border-gray-100">
+          3명 이상 모여서 플레이하세요
+        </div>
+      </div>
     </div>
   );
 }
-
