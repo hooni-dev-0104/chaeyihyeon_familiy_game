@@ -1,20 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-:root {
-  --bg-primary: #0f0f23;
-  --bg-secondary: #1a1a2e;
-  --bg-card: #16213e;
-  --accent-primary: #e94560;
-  --accent-secondary: #0f3460;
-  --text-primary: #ffffff;
-  --text-secondary: #a0aec0;
-  --success: #10b981;
-  --warning: #f59e0b;
-}
 
 * {
   -webkit-tap-highlight-color: transparent;
@@ -22,175 +10,98 @@
 
 body {
   font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  min-height: 100vh;
+  background: #f5f5f5;
+  color: #333;
 }
 
-/* 버튼 최소 크기 */
 button, a {
-  min-height: 44px;
+  min-height: 48px;
 }
 
-/* 글로우 효과 */
-.glow-red {
-  box-shadow: 0 0 20px rgba(233, 69, 96, 0.4),
-              0 0 40px rgba(233, 69, 96, 0.2),
-              0 0 60px rgba(233, 69, 96, 0.1);
+/* 간단한 카드 */
+.card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: all 0.2s;
 }
 
-.glow-blue {
-  box-shadow: 0 0 20px rgba(59, 130, 246, 0.4),
-              0 0 40px rgba(59, 130, 246, 0.2);
+.card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transform: translateY(-2px);
 }
 
-.glow-purple {
-  box-shadow: 0 0 20px rgba(168, 85, 247, 0.4),
-              0 0 40px rgba(168, 85, 247, 0.2);
+/* 버튼 */
+.btn {
+  border-radius: 12px;
+  font-weight: 600;
+  transition: all 0.2s;
+  border: none;
+  cursor: pointer;
 }
 
-.glow-green {
-  box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
-}
-
-/* 카드 스타일 */
-.game-card {
-  background: linear-gradient(145deg, rgba(26, 26, 46, 0.9), rgba(22, 33, 62, 0.9));
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
-}
-
-.game-card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(233, 69, 96, 0.5);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3),
-              0 0 20px rgba(233, 69, 96, 0.1);
-}
-
-/* 버튼 스타일 */
 .btn-primary {
-  background: linear-gradient(135deg, #e94560, #c73e54);
+  background: #4f46e5;
   color: white;
-  font-weight: 700;
-  transition: all 0.3s ease;
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(233, 69, 96, 0.4);
-}
-
-.btn-primary:active {
-  transform: translateY(0);
+  background: #4338ca;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
 }
 
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: white;
-  font-weight: 600;
-  transition: all 0.3s ease;
+  background: white;
+  color: #4f46e5;
+  border: 2px solid #4f46e5;
 }
 
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.3);
+  background: #f5f5f5;
 }
 
-/* 인풋 스타일 */
-.input-dark {
-  background: rgba(15, 15, 35, 0.8);
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  color: white;
-  transition: all 0.3s ease;
+/* 입력 */
+.input {
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 16px;
+  transition: all 0.2s;
 }
 
-.input-dark:focus {
-  border-color: #e94560;
+.input:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.2);
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
 }
 
-.input-dark::placeholder {
-  color: rgba(255, 255, 255, 0.4);
-}
-
-/* 배지 스타일 */
+/* 배지 */
 .badge {
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
 }
 
-.badge-liar {
-  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+.badge-blue {
+  background: #dbeafe;
+  color: #1e40af;
 }
 
-.badge-mafia {
-  background: linear-gradient(135deg, #a855f7, #7c3aed);
+.badge-purple {
+  background: #f3e8ff;
+  color: #6b21a8;
 }
 
-.badge-waiting {
-  background: linear-gradient(135deg, #10b981, #059669);
+.badge-green {
+  background: #d1fae5;
+  color: #065f46;
 }
 
-.badge-playing {
-  background: linear-gradient(135deg, #f59e0b, #d97706);
+.badge-yellow {
+  background: #fef3c7;
+  color: #92400e;
 }
-
-/* 애니메이션 */
-@keyframes pulse-glow {
-  0%, 100% {
-    box-shadow: 0 0 20px rgba(233, 69, 96, 0.4);
-  }
-  50% {
-    box-shadow: 0 0 40px rgba(233, 69, 96, 0.6);
-  }
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-
-@keyframes fade-in {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.animate-pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
-}
-
-.animate-float {
-  animation: float 6s ease-in-out infinite;
-}
-
-.animate-fade-in {
-  animation: fade-in 0.5s ease-out;
-}
-
-/* 스크롤바 */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--bg-primary);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--accent-primary);
-  border-radius: 4px;
-}
-
-/* 배경 패턴 */
-.bg-pattern {
-  background-image: 
-    radial-gradient(circle at 20% 80%, rgba(233, 69, 96, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(168, 85, 247, 0.05) 0%, transparent 50%);
-}
-
