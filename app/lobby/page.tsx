@@ -199,6 +199,7 @@ export default function LobbyPage() {
         <CreateRoomModal
           onClose={() => setShowCreateModal(false)}
           userId={user?.id}
+          defaultGameType={selectedGameType}
           onRoomCreated={(roomId) => {
             setShowCreateModal(false);
             router.push(`/room/${roomId}`);
@@ -212,23 +213,18 @@ export default function LobbyPage() {
 interface CreateRoomModalProps {
   onClose: () => void;
   userId: string;
+  defaultGameType?: 'liar' | 'mafia' | null;
   onRoomCreated: (roomId: string) => void;
 }
 
-function CreateRoomModal({ onClose, userId, onRoomCreated }: CreateRoomModalProps) {
+function CreateRoomModal({ onClose, userId, defaultGameType, onRoomCreated }: CreateRoomModalProps) {
   const [roomName, setRoomName] = useState('');
-  const [gameType, setGameType] = useState<'liar' | 'mafia'>('liar');
+  const [gameType, setGameType] = useState<'liar' | 'mafia'>(
+    defaultGameType || 'liar'
+  );
   const [maxPlayers, setMaxPlayers] = useState(8);
   const [loading, setLoading] = useState(false);
   const supabase = createClient();
-  
-  useEffect(() => {
-    const searchParams = new URLSearchParams(window.location.search);
-    const gameParam = searchParams.get('game');
-    if (gameParam === 'mafia') {
-      setGameType('mafia');
-    }
-  }, []);
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
