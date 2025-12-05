@@ -50,7 +50,7 @@ export default function SignupPage() {
       if (error) throw error;
 
       if (data.user) {
-        router.push('/lobby');
+        router.push('/games');
         router.refresh();
       }
     } catch (error: any) {

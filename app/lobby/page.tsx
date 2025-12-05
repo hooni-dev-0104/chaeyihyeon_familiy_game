@@ -1,8 +1,10 @@
 'use client';
 
+'use client';
+
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import type { Room } from '@/types/game.types';
 
 interface Profile {
@@ -16,10 +18,16 @@ export default function LobbyPage() {
   const [rooms, setRooms] = useState<Room[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [selectedGameType, setSelectedGameType] = useState<'liar' | 'mafia' | null>(null);
   const router = useRouter();
+  const searchParams = useSearchParams();
   const supabase = createClient();
 
   useEffect(() => {
+    const gameParam = searchParams.get('game');
+    if (gameParam === 'liar' || gameParam === 'mafia') {
+      setSelectedGameType(gameParam);
+    }
     checkUser();
     fetchRooms();
     
@@ -44,7 +52,7 @@ export default function LobbyPage() {
       const { data: { user } } = await supabase.auth.getUser();
       
       if (!user) {
-        router.push('/auth/login');
+        router.push('/');
         return;
       }
 
@@ -59,6 +67,7 @@ export default function LobbyPage() {
       setProfile(profileData);
     } catch (error) {
       console.error('Error checking user:', error);
+      router.push('/');
     } finally {
       setLoading(false);
     }
@@ -89,6 +98,10 @@ export default function LobbyPage() {
     router.refresh();
   };
 
+  const handleBackToGames = () => {
+    router.push('/games');
+  };
+
   const handleJoinRoom = (roomId: string) => {
     router.push(`/room/${roomId}`);
   };
@@ -106,15 +119,23 @@ export default function LobbyPage() {
       {/* 헤더 - 고정 */}
       <header className="bg-white border-b sticky top-0 z-10 safe-top">
         <div className="px-5 py-4 flex items-center justify-between">
-          <div>
-            <h1 className="text-lg font-bold text-gray-900">게임 로비</h1>
-            <p className="text-xs text-gray-600 mt-0.5">{profile?.nickname}님</p>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={handleBackToGames}
+              className="text-gray-600 px-2 py-1"
+            >
+              ←
+            </button>
+            <div>
+              <h1 className="text-lg font-bold text-gray-900">게임 로비</h1>
+              <p className="text-xs text-gray-600 mt-0.5">{profile?.nickname}님</p>
+            </div>
           </div>
           <button
             onClick={handleLogout}
             className="text-gray-600 px-3 py-2 text-sm"
           >
-            나가기
+            로그아웃
           </button>
         </div>
       </header>
@@ -200,6 +221,14 @@ function CreateRoomModal({ onClose, userId, onRoomCreated }: CreateRoomModalProp
   const [maxPlayers, setMaxPlayers] = useState(8);
   const [loading, setLoading] = useState(false);
   const supabase = createClient();
+  
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const gameParam = searchParams.get('game');
+    if (gameParam === 'mafia') {
+      setGameType('mafia');
+    }
+  }, []);
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
