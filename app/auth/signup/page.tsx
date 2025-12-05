@@ -63,17 +63,17 @@ export default function SignupPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center p-6 safe-top safe-bottom">
       <div className="w-full max-w-sm">
-        <Link href="/" className="inline-flex items-center gap-2 text-gray-600 mb-6 text-sm">
+        <Link href="/" className="inline-flex items-center gap-1.5 text-gray-600 mb-8 text-sm">
           ← 돌아가기
         </Link>
 
         <div className="card p-6">
           <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">회원가입</h1>
+            <h1 className="text-2xl font-bold text-gray-900 mb-1.5">회원가입</h1>
             <p className="text-sm text-gray-600">가족 게임에 참여하세요</p>
           </div>
 
-          <form onSubmit={handleSignup} className="space-y-4">
+          <form onSubmit={handleSignup} className="space-y-natural-sm">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 닉네임
@@ -144,7 +144,7 @@ export default function SignupPage() {
             <button
               type="submit"
               disabled={loading}
-              className="btn btn-primary w-full no-select disabled:opacity-50"
+              className="btn btn-primary w-full no-select disabled:opacity-50 mt-4"
             >
               {loading ? '가입 중...' : '가입하기'}
             </button>

@@ -3,9 +3,9 @@ import Link from "next/link";
 export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center p-6 safe-top safe-bottom">
-      <div className="w-full max-w-sm space-y-8">
+      <div className="w-full max-w-sm space-y-natural-lg">
         {/* 타이틀 */}
-        <div className="text-center space-y-3">
+        <div className="text-center space-y-2">
           <h1 className="text-4xl font-bold text-gray-900 leading-tight">
             가족 게임방
           </h1>
@@ -29,7 +29,7 @@ export default function Home() {
         </div>
 
         {/* 버튼 */}
-        <div className="space-y-3">
+        <div className="space-y-natural-sm">
           <Link
             href="/auth/login"
             className="btn btn-primary w-full no-select"
@@ -45,7 +45,7 @@ export default function Home() {
         </div>
 
         {/* 하단 정보 */}
-        <div className="text-center space-y-1">
+        <div className="text-center space-y-1 pt-2">
           <p className="text-xs text-gray-500">3-12명이 함께 즐기는 게임</p>
           <p className="text-xs text-gray-400">모바일에서도 편하게!</p>
         </div>

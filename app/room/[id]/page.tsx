@@ -242,7 +242,7 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white safe-top safe-bottom">
       {/* 헤더 - 고정 */}
       <header className="bg-white border-b sticky top-0 z-10 safe-top">
-        <div className="px-4 py-4 flex items-center justify-between">
+        <div className="px-5 py-4 flex items-center justify-between">
           <div className="flex-1 min-w-0">
             <h1 className="text-lg font-bold text-gray-900 truncate">{room.name}</h1>
             <div className="flex items-center gap-2 mt-1 flex-wrap">
@@ -261,7 +261,7 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
         </div>
       </header>
 
-      <main className="px-4 py-6 pb-8 safe-bottom scroll-container">
+      <main className="px-5 py-6 pb-8 safe-bottom scroll-container">
         {/* 게임 설명 */}
         <div className="card p-4 mb-4">
           <h3 className="font-bold text-gray-900 text-sm mb-2">게임 설명</h3>
@@ -325,7 +325,7 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
         </div>
 
         {/* 액션 버튼 */}
-        <div className="space-y-3">
+        <div>
           {!isHost ? (
             <button
               onClick={handleReady}
@@ -349,7 +349,7 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
         </div>
 
         {isHost && (
-          <p className="text-center text-xs text-gray-500 mt-3">
+          <p className="text-center text-xs text-gray-500 mt-4">
             {!allReady && '모든 플레이어가 준비해야 시작할 수 있습니다.'}
             {allReady && players.length < 3 && '최소 3명이 필요합니다.'}
             {canStart && '게임을 시작할 수 있습니다!'}

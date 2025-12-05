@@ -40,17 +40,17 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center p-6 safe-top safe-bottom">
       <div className="w-full max-w-sm">
-        <Link href="/" className="inline-flex items-center gap-2 text-gray-600 mb-6 text-sm">
+        <Link href="/" className="inline-flex items-center gap-1.5 text-gray-600 mb-8 text-sm">
           ← 돌아가기
         </Link>
 
         <div className="card p-6">
           <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">로그인</h1>
+            <h1 className="text-2xl font-bold text-gray-900 mb-1.5">로그인</h1>
             <p className="text-sm text-gray-600">게임에 참여하세요</p>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-5">
+          <form onSubmit={handleLogin} className="space-y-natural">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 이메일
@@ -91,7 +91,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="btn btn-primary w-full no-select disabled:opacity-50"
+              className="btn btn-primary w-full no-select disabled:opacity-50 mt-6"
             >
               {loading ? '로그인 중...' : '로그인'}
             </button>

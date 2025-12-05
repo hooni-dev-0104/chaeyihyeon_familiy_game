@@ -105,7 +105,7 @@ export default function LobbyPage() {
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white safe-top safe-bottom">
       {/* 헤더 - 고정 */}
       <header className="bg-white border-b sticky top-0 z-10 safe-top">
-        <div className="px-4 py-4 flex items-center justify-between">
+        <div className="px-5 py-4 flex items-center justify-between">
           <div>
             <h1 className="text-lg font-bold text-gray-900">게임 로비</h1>
             <p className="text-xs text-gray-600 mt-0.5">{profile?.nickname}님</p>
@@ -119,7 +119,7 @@ export default function LobbyPage() {
         </div>
       </header>
 
-      <main className="px-4 py-6 pb-8 safe-bottom scroll-container">
+      <main className="px-5 py-6 pb-8 safe-bottom scroll-container">
         {/* 방 만들기 버튼 */}
         <button
           onClick={() => setShowCreateModal(true)}
@@ -245,7 +245,7 @@ function CreateRoomModal({ onClose, userId, onRoomCreated }: CreateRoomModalProp
           </button>
         </div>
         
-        <form onSubmit={handleCreate} className="space-y-5">
+        <form onSubmit={handleCreate} className="space-y-natural">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               방 이름
