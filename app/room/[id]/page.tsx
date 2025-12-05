@@ -221,7 +221,7 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center safe-top safe-bottom">
         <div className="text-gray-600">로딩 중...</div>
       </div>
     );
@@ -229,7 +229,7 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
 
   if (!room) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center safe-top safe-bottom">
         <div className="text-gray-600">방을 찾을 수 없습니다.</div>
       </div>
     );
@@ -239,40 +239,40 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
   const canStart = allReady && players.length >= 3;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      {/* 헤더 */}
-      <header className="bg-white border-b">
-        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div>
-            <h1 className="text-xl font-bold text-gray-800">{room.name}</h1>
-            <div className="flex items-center gap-2 mt-1">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white safe-top safe-bottom">
+      {/* 헤더 - 고정 */}
+      <header className="bg-white border-b sticky top-0 z-10 safe-top">
+        <div className="px-4 py-4 flex items-center justify-between">
+          <div className="flex-1 min-w-0">
+            <h1 className="text-lg font-bold text-gray-900 truncate">{room.name}</h1>
+            <div className="flex items-center gap-2 mt-1 flex-wrap">
               <span className={`badge ${room.game_type === 'liar' ? 'badge-blue' : 'badge-purple'}`}>
                 {room.game_type === 'liar' ? '라이어 게임' : '마피아 게임'}
               </span>
-              <span className="text-sm text-gray-600">{players.length}/{room.max_players}명</span>
+              <span className="text-xs text-gray-500">{players.length}/{room.max_players}명</span>
             </div>
           </div>
           <button
             onClick={handleLeaveRoom}
-            className="text-red-600 hover:text-red-700 px-4 py-2"
+            className="text-red-600 px-3 py-2 text-sm flex-shrink-0"
           >
             나가기
           </button>
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-4 py-6">
+      <main className="px-4 py-6 pb-8 safe-bottom scroll-container">
         {/* 게임 설명 */}
-        <div className="card p-5 mb-6">
-          <h3 className="font-bold text-gray-800 mb-2">게임 설명</h3>
+        <div className="card p-4 mb-4">
+          <h3 className="font-bold text-gray-900 text-sm mb-2">게임 설명</h3>
           {room.game_type === 'liar' ? (
-            <p className="text-sm text-gray-600 leading-relaxed">
+            <p className="text-xs text-gray-600 leading-relaxed">
               한 명의 라이어를 제외한 모든 플레이어에게 같은 제시어가 주어집니다. 
               라이어는 카테고리만 알 수 있습니다. 각자 돌아가며 힌트를 제시하고, 
               투표로 라이어를 찾아내세요!
             </p>
           ) : (
-            <p className="text-sm text-gray-600 leading-relaxed">
+            <p className="text-xs text-gray-600 leading-relaxed">
               AI 사회자가 진행하는 마피아 게임입니다. 마피아는 밤에 시민을 제거하고, 
               시민들은 낮에 토론하여 마피아를 찾아내야 합니다.
             </p>
@@ -280,44 +280,44 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
         </div>
 
         {/* 플레이어 목록 */}
-        <div className="card p-5 mb-6">
+        <div className="card p-4 mb-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-bold text-gray-800">참가자</h3>
-            <span className="text-sm text-gray-600">{players.length}/{room.max_players}명</span>
+            <h3 className="font-bold text-gray-900 text-sm">참가자</h3>
+            <span className="text-xs text-gray-500">{players.length}/{room.max_players}명</span>
           </div>
 
           <div className="space-y-2">
             {players.map((player) => (
               <div
                 key={player.user_id}
-                className={`flex items-center justify-between p-4 rounded-lg border-2 ${
+                className={`flex items-center justify-between p-3 rounded-xl border ${
                   player.is_ready 
                     ? 'bg-green-50 border-green-200' 
                     : 'bg-gray-50 border-gray-200'
                 }`}
               >
-                <div className="flex items-center gap-3">
-                  <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-white ${
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-white text-sm flex-shrink-0 ${
                     player.is_ready ? 'bg-green-500' : 'bg-gray-400'
                   }`}>
                     {player.nickname.charAt(0)}
                   </div>
-                  <div>
-                    <span className="font-bold text-gray-800">{player.nickname}</span>
+                  <div className="min-w-0 flex-1">
+                    <div className="font-bold text-gray-900 text-sm truncate">{player.nickname}</div>
                     <div className="flex items-center gap-2 mt-0.5">
                       {room.host_id === player.user_id && (
                         <span className="text-xs text-yellow-600 font-medium">호스트</span>
                       )}
                       {player.user_id === user?.id && (
-                        <span className="text-xs text-indigo-600 font-medium">나</span>
+                        <span className="text-xs text-blue-600 font-medium">나</span>
                       )}
                     </div>
                   </div>
                 </div>
-                <span className={`text-sm font-bold ${
+                <span className={`text-xs font-bold flex-shrink-0 ${
                   player.is_ready ? 'text-green-600' : 'text-gray-500'
                 }`}>
-                  {player.is_ready ? '✓ 준비 완료' : '대기중'}
+                  {player.is_ready ? '✓ 준비' : '대기'}
                 </span>
               </div>
             ))}
@@ -329,7 +329,7 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
           {!isHost ? (
             <button
               onClick={handleReady}
-              className={`btn w-full py-4 text-lg ${
+              className={`btn w-full no-select ${
                 myPlayer?.is_ready ? 'btn-secondary' : 'btn-primary'
               }`}
             >
@@ -339,7 +339,7 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
             <button
               onClick={handleStartGame}
               disabled={!canStart}
-              className={`btn w-full py-4 text-lg ${
+              className={`btn w-full no-select ${
                 canStart ? 'btn-primary' : 'btn-secondary opacity-50'
               }`}
             >
@@ -349,7 +349,7 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
         </div>
 
         {isHost && (
-          <p className="text-center text-sm text-gray-500 mt-3">
+          <p className="text-center text-xs text-gray-500 mt-3">
             {!allReady && '모든 플레이어가 준비해야 시작할 수 있습니다.'}
             {allReady && players.length < 3 && '최소 3명이 필요합니다.'}
             {canStart && '게임을 시작할 수 있습니다!'}

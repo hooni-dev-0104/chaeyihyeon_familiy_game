@@ -38,16 +38,16 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        <Link href="/" className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-800 mb-6">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center p-6 safe-top safe-bottom">
+      <div className="w-full max-w-sm">
+        <Link href="/" className="inline-flex items-center gap-2 text-gray-600 mb-6 text-sm">
           ← 돌아가기
         </Link>
 
-        <div className="card p-8">
+        <div className="card p-6">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">로그인</h1>
-            <p className="text-gray-600">게임에 참여하세요</p>
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">로그인</h1>
+            <p className="text-sm text-gray-600">게임에 참여하세요</p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-5">
@@ -60,8 +60,10 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="input w-full"
+                className="input"
                 placeholder="email@example.com"
+                autoComplete="email"
+                inputMode="email"
               />
             </div>
 
@@ -74,13 +76,14 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="input w-full"
+                className="input"
                 placeholder="비밀번호를 입력하세요"
+                autoComplete="current-password"
               />
             </div>
 
             {error && (
-              <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
+              <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm">
                 {error}
               </div>
             )}
@@ -88,15 +91,15 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="btn btn-primary w-full py-4 text-lg disabled:opacity-50"
+              className="btn btn-primary w-full no-select disabled:opacity-50"
             >
               {loading ? '로그인 중...' : '로그인'}
             </button>
           </form>
 
-          <div className="mt-6 text-center text-gray-600">
+          <div className="mt-6 text-center text-sm text-gray-600">
             계정이 없으신가요?{' '}
-            <Link href="/auth/signup" className="text-indigo-600 hover:underline font-medium">
+            <Link href="/auth/signup" className="text-blue-600 font-medium">
               회원가입
             </Link>
           </div>

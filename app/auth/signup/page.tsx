@@ -61,16 +61,16 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        <Link href="/" className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-800 mb-6">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center p-6 safe-top safe-bottom">
+      <div className="w-full max-w-sm">
+        <Link href="/" className="inline-flex items-center gap-2 text-gray-600 mb-6 text-sm">
           ← 돌아가기
         </Link>
 
-        <div className="card p-8">
+        <div className="card p-6">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">회원가입</h1>
-            <p className="text-gray-600">가족 게임에 참여하세요</p>
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">회원가입</h1>
+            <p className="text-sm text-gray-600">가족 게임에 참여하세요</p>
           </div>
 
           <form onSubmit={handleSignup} className="space-y-4">
@@ -83,8 +83,9 @@ export default function SignupPage() {
                 value={nickname}
                 onChange={(e) => setNickname(e.target.value)}
                 required
-                className="input w-full"
+                className="input"
                 placeholder="게임에서 사용할 이름"
+                autoComplete="nickname"
               />
             </div>
 
@@ -97,8 +98,10 @@ export default function SignupPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="input w-full"
+                className="input"
                 placeholder="email@example.com"
+                autoComplete="email"
+                inputMode="email"
               />
             </div>
 
@@ -111,8 +114,9 @@ export default function SignupPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="input w-full"
+                className="input"
                 placeholder="최소 6자 이상"
+                autoComplete="new-password"
               />
             </div>
 
@@ -125,13 +129,14 @@ export default function SignupPage() {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
-                className="input w-full"
+                className="input"
                 placeholder="비밀번호를 다시 입력하세요"
+                autoComplete="new-password"
               />
             </div>
 
             {error && (
-              <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
+              <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm">
                 {error}
               </div>
             )}
@@ -139,15 +144,15 @@ export default function SignupPage() {
             <button
               type="submit"
               disabled={loading}
-              className="btn btn-primary w-full py-4 text-lg disabled:opacity-50"
+              className="btn btn-primary w-full no-select disabled:opacity-50"
             >
               {loading ? '가입 중...' : '가입하기'}
             </button>
           </form>
 
-          <div className="mt-6 text-center text-gray-600">
+          <div className="mt-6 text-center text-sm text-gray-600">
             이미 계정이 있으신가요?{' '}
-            <Link href="/auth/login" className="text-indigo-600 hover:underline font-medium">
+            <Link href="/auth/login" className="text-blue-600 font-medium">
               로그인
             </Link>
           </div>
