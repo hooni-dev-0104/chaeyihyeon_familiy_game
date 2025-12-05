@@ -19,19 +19,16 @@ export default function SignupPage() {
     e.preventDefault();
     setError('');
 
-    // 비밀번호 확인
     if (password !== confirmPassword) {
       setError('비밀번호가 일치하지 않습니다.');
       return;
     }
 
-    // 비밀번호 길이 확인
     if (password.length < 6) {
       setError('비밀번호는 최소 6자 이상이어야 합니다.');
       return;
     }
 
-    // 닉네임 확인
     if (nickname.trim().length < 2) {
       setError('닉네임은 최소 2자 이상이어야 합니다.');
       return;
@@ -53,7 +50,6 @@ export default function SignupPage() {
       if (error) throw error;
 
       if (data.user) {
-        // 회원가입 성공 후 로비로 이동
         router.push('/lobby');
         router.refresh();
       }
@@ -65,84 +61,89 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gradient-to-br from-purple-100 via-pink-100 to-blue-100 relative overflow-hidden">
-      {/* 배경 장식 */}
-      <div className="absolute top-10 right-10 text-6xl animate-float opacity-20">🎪</div>
-      <div className="absolute bottom-10 left-10 text-6xl animate-float opacity-20" style={{ animationDelay: '1s' }}>✨</div>
-      
-      <div className="w-full max-w-md relative z-10">
-        <div className="bg-white rounded-3xl shadow-2xl p-8 space-y-6 border-4 border-purple-200">
-          <div className="text-center space-y-3">
-            <div className="text-6xl mb-3 animate-bounce-subtle">🎊</div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-              환영해요!
-            </h1>
-            <p className="text-gray-600 font-medium">가족 게임방에 입장하세요! 🏠</p>
+    <div className="min-h-screen bg-[#0f0f23] bg-pattern flex flex-col items-center justify-center p-4">
+      <div className="w-full max-w-md animate-fade-in">
+        {/* 뒤로가기 */}
+        <Link href="/" className="inline-flex items-center gap-2 text-[#a0aec0] hover:text-white mb-8 transition-colors">
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          <span>돌아가기</span>
+        </Link>
+
+        {/* 카드 */}
+        <div className="game-card rounded-2xl p-8">
+          {/* 헤더 */}
+          <div className="text-center mb-8">
+            <div className="inline-block p-3 rounded-xl bg-purple-500/20 mb-4">
+              <svg className="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+              </svg>
+            </div>
+            <h1 className="text-3xl font-bold text-white mb-2">회원가입</h1>
+            <p className="text-[#a0aec0]">가족 게임에 참여하세요</p>
           </div>
 
+          {/* 폼 */}
           <form onSubmit={handleSignup} className="space-y-4">
-            <div className="space-y-2">
-              <label htmlFor="nickname" className="block text-sm font-medium text-gray-700">
+            <div>
+              <label className="block text-sm font-medium text-[#a0aec0] mb-2">
                 닉네임
               </label>
               <input
-                id="nickname"
                 type="text"
                 value={nickname}
                 onChange={(e) => setNickname(e.target.value)}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
-                placeholder="게임에서 사용할 닉네임"
+                className="input-dark w-full px-4 py-3 rounded-xl"
+                placeholder="게임에서 사용할 이름"
               />
             </div>
 
-            <div className="space-y-2">
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+            <div>
+              <label className="block text-sm font-medium text-[#a0aec0] mb-2">
                 이메일
               </label>
               <input
-                id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+                className="input-dark w-full px-4 py-3 rounded-xl"
                 placeholder="email@example.com"
               />
             </div>
 
-            <div className="space-y-2">
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+            <div>
+              <label className="block text-sm font-medium text-[#a0aec0] mb-2">
                 비밀번호
               </label>
               <input
-                id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+                className="input-dark w-full px-4 py-3 rounded-xl"
                 placeholder="최소 6자 이상"
               />
             </div>
 
-            <div className="space-y-2">
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+            <div>
+              <label className="block text-sm font-medium text-[#a0aec0] mb-2">
                 비밀번호 확인
               </label>
               <input
-                id="confirmPassword"
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+                className="input-dark w-full px-4 py-3 rounded-xl"
                 placeholder="비밀번호 재입력"
               />
             </div>
 
             {error && (
-              <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
+              <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-sm">
                 {error}
               </div>
             )}
@@ -150,32 +151,21 @@ export default function SignupPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white py-4 px-6 rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none border-4 border-purple-100"
+              className="btn-primary w-full py-4 rounded-xl text-lg disabled:opacity-50 disabled:cursor-not-allowed mt-2"
             >
-              {loading ? '🎨 준비 중...' : '✨ 시작하기!'}
+              {loading ? '가입 중...' : '가입하기'}
             </button>
           </form>
 
-          <div className="text-center">
-            <Link
-              href="/auth/login"
-              className="text-indigo-600 hover:text-indigo-700 font-medium text-sm"
-            >
-              이미 계정이 있으신가요? 로그인
+          {/* 로그인 링크 */}
+          <div className="mt-6 text-center">
+            <span className="text-[#a0aec0]">이미 계정이 있으신가요? </span>
+            <Link href="/auth/login" className="text-[#e94560] hover:underline font-medium">
+              로그인
             </Link>
           </div>
-        </div>
-
-        <div className="mt-4 text-center">
-          <Link
-            href="/"
-            className="text-gray-600 hover:text-gray-800 text-sm"
-          >
-            ← 홈으로 돌아가기
-          </Link>
         </div>
       </div>
     </div>
   );
 }
-

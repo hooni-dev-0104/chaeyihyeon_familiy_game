@@ -38,54 +38,61 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gradient-to-br from-purple-100 via-pink-100 to-blue-100 relative overflow-hidden">
-      {/* 배경 장식 */}
-      <div className="absolute top-10 left-10 text-6xl animate-float opacity-20">🎮</div>
-      <div className="absolute bottom-10 right-10 text-6xl animate-float opacity-20" style={{ animationDelay: '1s' }}>🎲</div>
-      
-      <div className="w-full max-w-md relative z-10">
-        <div className="bg-white rounded-3xl shadow-2xl p-8 space-y-6 border-4 border-indigo-200">
-          <div className="text-center space-y-3">
-            <div className="text-6xl mb-3 animate-bounce-subtle">🎉</div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-              반가워요!
-            </h1>
-            <p className="text-gray-600 font-medium">게임에 참여하세요! 🎮</p>
+    <div className="min-h-screen bg-[#0f0f23] bg-pattern flex flex-col items-center justify-center p-4">
+      <div className="w-full max-w-md animate-fade-in">
+        {/* 뒤로가기 */}
+        <Link href="/" className="inline-flex items-center gap-2 text-[#a0aec0] hover:text-white mb-8 transition-colors">
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          <span>돌아가기</span>
+        </Link>
+
+        {/* 카드 */}
+        <div className="game-card rounded-2xl p-8">
+          {/* 헤더 */}
+          <div className="text-center mb-8">
+            <div className="inline-block p-3 rounded-xl bg-[#e94560]/20 mb-4">
+              <svg className="w-8 h-8 text-[#e94560]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+              </svg>
+            </div>
+            <h1 className="text-3xl font-bold text-white mb-2">로그인</h1>
+            <p className="text-[#a0aec0]">게임에 참여하세요</p>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div className="space-y-2">
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+          {/* 폼 */}
+          <form onSubmit={handleLogin} className="space-y-5">
+            <div>
+              <label className="block text-sm font-medium text-[#a0aec0] mb-2">
                 이메일
               </label>
               <input
-                id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+                className="input-dark w-full px-4 py-3 rounded-xl"
                 placeholder="email@example.com"
               />
             </div>
 
-            <div className="space-y-2">
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+            <div>
+              <label className="block text-sm font-medium text-[#a0aec0] mb-2">
                 비밀번호
               </label>
               <input
-                id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+                className="input-dark w-full px-4 py-3 rounded-xl"
                 placeholder="••••••••"
               />
             </div>
 
             {error && (
-              <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
+              <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-sm">
                 {error}
               </div>
             )}
@@ -93,32 +100,21 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white py-4 px-6 rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none border-4 border-indigo-100"
+              className="btn-primary w-full py-4 rounded-xl text-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? '✨ 입장 중...' : '🎮 게임 시작!'}
+              {loading ? '로그인 중...' : '로그인'}
             </button>
           </form>
 
-          <div className="text-center">
-            <Link
-              href="/auth/signup"
-              className="text-indigo-600 hover:text-indigo-700 font-medium text-sm"
-            >
-              계정이 없으신가요? 회원가입
+          {/* 회원가입 링크 */}
+          <div className="mt-6 text-center">
+            <span className="text-[#a0aec0]">계정이 없으신가요? </span>
+            <Link href="/auth/signup" className="text-[#e94560] hover:underline font-medium">
+              회원가입
             </Link>
           </div>
-        </div>
-
-        <div className="mt-4 text-center">
-          <Link
-            href="/"
-            className="text-gray-600 hover:text-gray-800 text-sm"
-          >
-            ← 홈으로 돌아가기
-          </Link>
         </div>
       </div>
     </div>
   );
 }
-
