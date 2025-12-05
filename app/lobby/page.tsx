@@ -109,85 +109,110 @@ export default function LobbyPage() {
   }
 
   return (
-    <div className="min-h-screen p-4 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen p-4 bg-gradient-to-br from-purple-100 via-pink-100 to-blue-100 relative overflow-hidden">
+      {/* 배경 장식 */}
+      <div className="absolute top-10 right-10 text-5xl animate-float opacity-10">🎪</div>
+      <div className="absolute bottom-10 left-10 text-5xl animate-float opacity-10" style={{ animationDelay: '1s' }}>🎮</div>
+      
+      <div className="max-w-6xl mx-auto relative z-10">
         {/* 헤더 */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
+        <div className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-3xl shadow-2xl p-6 mb-6 border-4 border-white">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                게임 로비
-              </h1>
-              <p className="text-gray-600 mt-1">
-                환영합니다, <span className="font-semibold text-indigo-600">{profile?.nickname}</span>님!
-              </p>
+            <div className="flex items-center gap-4">
+              <div className="text-5xl animate-bounce-subtle">🎉</div>
+              <div>
+                <h1 className="text-3xl font-bold text-white mb-1">
+                  게임 로비
+                </h1>
+                <p className="text-white/90 font-medium">
+                  환영합니다, <span className="font-bold text-yellow-300">{profile?.nickname}</span>님! 👋
+                </p>
+              </div>
             </div>
             <button
               onClick={handleLogout}
-              className="px-4 py-2 text-gray-600 hover:text-gray-800 font-medium"
+              className="px-6 py-3 bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 font-bold rounded-xl transition-all border-2 border-white/30"
             >
-              로그아웃
+              나가기 🚪
             </button>
           </div>
         </div>
 
         {/* 방 생성 버튼 */}
         <div className="mb-6">
-          <Button
+          <button
             onClick={handleCreateRoom}
-            className="w-full"
-            size="lg"
+            className="w-full bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400 text-white py-6 px-8 rounded-3xl font-bold text-2xl shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 border-4 border-white btn-pulse"
           >
-            + 새 게임 방 만들기
-          </Button>
+            <span className="flex items-center justify-center gap-3">
+              <span className="text-3xl">➕</span>
+              <span>새 게임 방 만들기</span>
+              <span className="text-3xl">🎮</span>
+            </span>
+          </button>
         </div>
 
         {/* 활성 방 목록 */}
-        <div className="bg-white rounded-2xl shadow-lg p-6">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">활성 방 목록</h2>
+        <div className="bg-white rounded-3xl shadow-2xl p-6 border-4 border-indigo-200">
+          <div className="flex items-center gap-3 mb-6">
+            <span className="text-3xl">🏠</span>
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              활성 방 목록
+            </h2>
+          </div>
           
           {rooms.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-gray-500 text-lg">현재 활성화된 방이 없습니다.</p>
-              <p className="text-gray-400 mt-2">새로운 방을 만들어보세요!</p>
+            <div className="text-center py-16 bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl">
+              <div className="text-6xl mb-4 animate-bounce-subtle">🎪</div>
+              <p className="text-gray-600 text-xl font-bold mb-2">아직 열린 방이 없어요!</p>
+              <p className="text-gray-500">첫 번째 방을 만들어보세요! ✨</p>
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-4">
               {rooms.map((room) => (
                 <div
                   key={room.id}
-                  className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-4 border-2 border-indigo-100 hover:border-indigo-300 transition-all"
+                  className="bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 rounded-2xl p-5 border-3 border-indigo-200 hover:border-indigo-400 transition-all shadow-lg hover:shadow-xl game-card"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
-                      <div className="flex items-center gap-3">
-                        <h3 className="text-lg font-bold text-gray-800">{room.name}</h3>
-                        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                          room.game_type === 'liar' 
-                            ? 'bg-blue-100 text-blue-700' 
-                            : 'bg-purple-100 text-purple-700'
-                        }`}>
-                          {room.game_type === 'liar' ? '라이어 게임' : '마피아 게임'}
+                      <div className="flex items-center gap-3 mb-2">
+                        <span className="text-2xl">
+                          {room.game_type === 'liar' ? '🎭' : '🔪'}
                         </span>
-                        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                          room.status === 'waiting' 
-                            ? 'bg-green-100 text-green-700' 
-                            : 'bg-yellow-100 text-yellow-700'
+                        <h3 className="text-xl font-bold text-gray-800">{room.name}</h3>
+                      </div>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className={`px-3 py-1 rounded-full text-xs font-bold shadow-md ${
+                          room.game_type === 'liar' 
+                            ? 'bg-blue-500 text-white' 
+                            : 'bg-purple-500 text-white'
                         }`}>
-                          {room.status === 'waiting' ? '대기 중' : '게임 중'}
+                          {room.game_type === 'liar' ? '🎭 라이어 게임' : '🔪 마피아 게임'}
+                        </span>
+                        <span className={`px-3 py-1 rounded-full text-xs font-bold shadow-md ${
+                          room.status === 'waiting' 
+                            ? 'bg-green-500 text-white' 
+                            : 'bg-yellow-500 text-white'
+                        }`}>
+                          {room.status === 'waiting' ? '✨ 대기 중' : '🎮 게임 중'}
+                        </span>
+                        <span className="px-3 py-1 bg-white rounded-full text-xs font-bold text-gray-700 shadow-md">
+                          👥 {(room as any).room_players?.[0]?.count || 0} / {room.max_players}명
                         </span>
                       </div>
-                      <p className="text-sm text-gray-600 mt-1">
-                        참가자: {(room as any).room_players?.[0]?.count || 0} / {room.max_players}명
-                      </p>
                     </div>
-                    <Button
+                    <button
                       onClick={() => handleJoinRoom(room.id)}
                       disabled={room.status === 'playing'}
-                      size="md"
+                      className={`px-6 py-3 rounded-xl font-bold text-lg shadow-lg transform transition-all ${
+                        room.status === 'waiting'
+                          ? 'bg-gradient-to-r from-green-400 to-green-500 text-white hover:scale-105 hover:shadow-xl'
+                          : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                      }`}
                     >
-                      {room.status === 'waiting' ? '입장' : '관전'}
-                    </Button>
+                      {room.status === 'waiting' ? '입장 🚪' : '게임 중 🎮'}
+                    </button>
                   </div>
                 </div>
               ))}
@@ -260,58 +285,68 @@ function CreateRoomModal({ onClose, userId, onRoomCreated }: CreateRoomModalProp
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">새 게임 방 만들기</h2>
+    <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fadeIn">
+      <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full p-8 border-4 border-indigo-200 transform scale-100 animate-bounce-in">
+        <div className="text-center mb-6">
+          <div className="text-5xl mb-3 animate-bounce-subtle">🎪</div>
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+            새 게임 방 만들기
+          </h2>
+        </div>
         
-        <form onSubmit={handleCreate} className="space-y-4">
+        <form onSubmit={handleCreate} className="space-y-5">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              방 이름
+            <label className="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
+              <span>🏷️</span>
+              <span>방 이름</span>
             </label>
             <input
               type="text"
               value={roomName}
               onChange={(e) => setRoomName(e.target.value)}
               required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
-              placeholder="재미있는 게임방"
+              className="w-full px-4 py-3 border-2 border-indigo-200 rounded-xl focus:ring-4 focus:ring-indigo-300 focus:border-indigo-500 outline-none font-medium text-lg transition-all"
+              placeholder="재미있는 게임방 💫"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              게임 유형
+            <label className="block text-sm font-bold text-gray-700 mb-3 flex items-center gap-2">
+              <span>🎮</span>
+              <span>게임 유형</span>
             </label>
             <div className="grid grid-cols-2 gap-3">
               <button
                 type="button"
                 onClick={() => setGameType('liar')}
-                className={`py-3 px-4 rounded-lg font-semibold transition-all ${
+                className={`py-4 px-4 rounded-2xl font-bold transition-all transform hover:scale-105 border-3 ${
                   gameType === 'liar'
-                    ? 'bg-blue-600 text-white shadow-lg'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    ? 'bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-xl scale-105 border-blue-300'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border-gray-300'
                 }`}
               >
-                라이어 게임
+                <div className="text-3xl mb-1">🎭</div>
+                <div>라이어 게임</div>
               </button>
               <button
                 type="button"
                 onClick={() => setGameType('mafia')}
-                className={`py-3 px-4 rounded-lg font-semibold transition-all ${
+                className={`py-4 px-4 rounded-2xl font-bold transition-all transform hover:scale-105 border-3 ${
                   gameType === 'mafia'
-                    ? 'bg-purple-600 text-white shadow-lg'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    ? 'bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-xl scale-105 border-purple-300'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border-gray-300'
                 }`}
               >
-                마피아 게임
+                <div className="text-3xl mb-1">🔪</div>
+                <div>마피아 게임</div>
               </button>
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              최대 인원: {maxPlayers}명
+            <label className="block text-sm font-bold text-gray-700 mb-3 flex items-center gap-2">
+              <span>👥</span>
+              <span>최대 인원: <span className="text-indigo-600 text-xl">{maxPlayers}명</span></span>
             </label>
             <input
               type="range"
@@ -319,26 +354,32 @@ function CreateRoomModal({ onClose, userId, onRoomCreated }: CreateRoomModalProp
               max="12"
               value={maxPlayers}
               onChange={(e) => setMaxPlayers(Number(e.target.value))}
-              className="w-full"
+              className="w-full h-3 bg-gradient-to-r from-indigo-200 to-purple-200 rounded-full appearance-none cursor-pointer"
+              style={{
+                background: `linear-gradient(to right, #6366f1 0%, #6366f1 ${((maxPlayers - 4) / 8) * 100}%, #e5e7eb ${((maxPlayers - 4) / 8) * 100}%, #e5e7eb 100%)`
+              }}
             />
+            <div className="flex justify-between text-xs text-gray-500 mt-1 font-medium">
+              <span>4명</span>
+              <span>12명</span>
+            </div>
           </div>
 
           <div className="flex gap-3 pt-4">
-            <Button
+            <button
               type="button"
               onClick={onClose}
-              variant="secondary"
-              className="flex-1"
+              className="flex-1 py-3 px-4 bg-gray-200 text-gray-700 rounded-xl font-bold hover:bg-gray-300 transition-all transform hover:scale-105"
             >
               취소
-            </Button>
-            <Button
+            </button>
+            <button
               type="submit"
               disabled={loading}
-              className="flex-1"
+              className="flex-1 py-3 px-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             >
-              {loading ? '생성 중...' : '방 만들기'}
-            </Button>
+              {loading ? '✨ 생성 중...' : '🎉 방 만들기'}
+            </button>
           </div>
         </form>
       </div>

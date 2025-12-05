@@ -38,14 +38,19 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
-      <div className="w-full max-w-md">
-        <div className="bg-white rounded-2xl shadow-xl p-8 space-y-6">
-          <div className="text-center space-y-2">
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-              로그인
+    <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gradient-to-br from-purple-100 via-pink-100 to-blue-100 relative overflow-hidden">
+      {/* 배경 장식 */}
+      <div className="absolute top-10 left-10 text-6xl animate-float opacity-20">🎮</div>
+      <div className="absolute bottom-10 right-10 text-6xl animate-float opacity-20" style={{ animationDelay: '1s' }}>🎲</div>
+      
+      <div className="w-full max-w-md relative z-10">
+        <div className="bg-white rounded-3xl shadow-2xl p-8 space-y-6 border-4 border-indigo-200">
+          <div className="text-center space-y-3">
+            <div className="text-6xl mb-3 animate-bounce-subtle">🎉</div>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+              반가워요!
             </h1>
-            <p className="text-gray-600">게임에 참여하세요!</p>
+            <p className="text-gray-600 font-medium">게임에 참여하세요! 🎮</p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-4">
@@ -88,9 +93,9 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 px-6 rounded-lg font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+              className="w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white py-4 px-6 rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none border-4 border-indigo-100"
             >
-              {loading ? '로그인 중...' : '로그인'}
+              {loading ? '✨ 입장 중...' : '🎮 게임 시작!'}
             </button>
           </form>
 
