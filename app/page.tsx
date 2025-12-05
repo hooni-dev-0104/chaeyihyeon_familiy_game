@@ -41,14 +41,14 @@ export default function Home() {
     <div className="layout-container layout-center safe-area">
       <div className="section-gap">
         {/* 헤더 섹션 */}
-        <div className="text-center py-6">
-          <h1 className="text-3xl font-bold text-gray-900 mb-3">가족 게임방</h1>
-          <p className="text-gray-500">이현이네 × 채이네</p>
+        <div className="text-center py-2">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">가족 게임방</h1>
+          <p className="text-gray-500 text-sm">이현이네 × 채이네</p>
         </div>
 
         {/* 로그인 폼 */}
-        <form onSubmit={handleLogin} className="flex flex-col gap-6">
-          <div className="flex flex-col gap-4">
+        <form onSubmit={handleLogin} className="flex flex-col gap-6 w-full">
+          <div className="flex flex-col gap-4 w-full">
             <div className="input-group">
               <label className="input-label">이메일</label>
               <input
@@ -78,12 +78,12 @@ export default function Home() {
           </div>
 
           {error && (
-            <div className="p-4 bg-red-50 border border-red-100 rounded-2xl text-red-600 text-sm text-center font-medium animate-bounce-subtle">
+            <div className="p-4 bg-red-50 border border-red-100 rounded-2xl text-red-600 text-sm text-center font-medium w-full">
               {error}
             </div>
           )}
 
-          <div className="flex flex-col gap-3 mt-2">
+          <div className="flex flex-col gap-3 w-full">
             <button
               type="submit"
               disabled={loading}
@@ -98,7 +98,7 @@ export default function Home() {
           </div>
         </form>
 
-        <div className="text-center text-xs text-gray-400 mt-4">
+        <div className="text-center text-xs text-gray-400 mt-2">
           즐거운 가족 게임을 시작해보세요 🎮
         </div>
       </div>

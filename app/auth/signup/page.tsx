@@ -64,8 +64,8 @@ export default function SignupPage() {
     <div className="layout-container layout-center safe-area">
       <div className="section-gap">
         {/* 헤더 */}
-        <div className="text-center py-4 relative">
-          <Link href="/" className="absolute left-0 top-1/2 -translate-y-1/2 p-3 text-gray-500 hover:bg-gray-100 rounded-full transition-colors">
+        <div className="text-center py-2 relative w-full">
+          <Link href="/" className="absolute left-0 top-1/2 -translate-y-1/2 p-2 -ml-2 text-gray-500 hover:bg-gray-100 rounded-full transition-colors">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M15 18l-6-6 6-6"/>
             </svg>
@@ -74,8 +74,8 @@ export default function SignupPage() {
         </div>
 
         {/* 입력 폼 */}
-        <form onSubmit={handleSignup} className="flex flex-col gap-6">
-          <div className="flex flex-col gap-4">
+        <form onSubmit={handleSignup} className="flex flex-col gap-6 w-full">
+          <div className="flex flex-col gap-4 w-full">
             <div className="input-group">
               <label className="input-label">닉네임</label>
               <input
@@ -131,7 +131,7 @@ export default function SignupPage() {
           </div>
 
           {error && (
-            <div className="p-4 bg-red-50 border border-red-100 rounded-2xl text-red-600 text-sm text-center font-medium">
+            <div className="p-4 bg-red-50 border border-red-100 rounded-2xl text-red-600 text-sm text-center font-medium w-full">
               {error}
             </div>
           )}
