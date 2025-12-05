@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter, useSearchParams } from 'next/navigation';
 import type { Room } from '@/types/game.types';
@@ -10,7 +10,7 @@ interface Profile {
   nickname: string;
 }
 
-export default function LobbyPage() {
+function LobbyContent() {
   const [user, setUser] = useState<any>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [rooms, setRooms] = useState<Room[]>([]);
@@ -170,7 +170,7 @@ export default function LobbyPage() {
 
         {/* 하단 버튼 (고정) */}
         <div className="fixed bottom-0 left-0 right-0 p-4 bg-white/80 backdrop-blur-md border-t border-gray-200 safe-area">
-          <div className="max-w-[480px] mx-auto">
+          <div className="max-w-[400px] mx-auto">
             <button
               onClick={() => setShowCreateModal(true)}
               className="btn btn-primary w-full shadow-lg"
@@ -194,6 +194,18 @@ export default function LobbyPage() {
         />
       )}
     </div>
+  );
+}
+
+export default function LobbyPage() {
+  return (
+    <Suspense fallback={
+      <div className="layout-container layout-center">
+        <div className="text-center text-gray-500">로딩 중...</div>
+      </div>
+    }>
+      <LobbyContent />
+    </Suspense>
   );
 }
 
@@ -249,7 +261,7 @@ function CreateRoomModal({ onClose, userId, defaultGameType, onRoomCreated }: Cr
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center z-50 safe-area">
-      <div className="bg-white w-full max-w-[480px] rounded-t-3xl sm:rounded-3xl p-6 animate-slide-up max-h-[90vh] overflow-y-auto">
+      <div className="bg-white w-full max-w-[400px] rounded-t-3xl sm:rounded-3xl p-6 animate-slide-up max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-gray-900">새 게임 방 만들기</h2>
           <button onClick={onClose} className="p-2 -mr-2 text-gray-400 hover:text-gray-600">
@@ -259,7 +271,7 @@ function CreateRoomModal({ onClose, userId, defaultGameType, onRoomCreated }: Cr
         
         <form onSubmit={handleCreate} className="form-gap">
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2 ml-1">
+            <label className="block text-xs font-semibold text-gray-700 mb-2 ml-1">
               방 이름
             </label>
             <input
@@ -273,7 +285,7 @@ function CreateRoomModal({ onClose, userId, defaultGameType, onRoomCreated }: Cr
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-3 ml-1">
+            <label className="block text-xs font-semibold text-gray-700 mb-3 ml-1">
               게임 선택
             </label>
             <div className="grid grid-cols-2 gap-3">
@@ -310,8 +322,8 @@ function CreateRoomModal({ onClose, userId, defaultGameType, onRoomCreated }: Cr
 
           <div>
             <div className="flex justify-between items-center mb-3 ml-1">
-              <label className="text-sm font-semibold text-gray-700">최대 인원</label>
-              <span className="text-sm font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-lg">
+              <label className="text-xs font-semibold text-gray-700">최대 인원</label>
+              <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-lg">
                 {maxPlayers}명
               </span>
             </div>
