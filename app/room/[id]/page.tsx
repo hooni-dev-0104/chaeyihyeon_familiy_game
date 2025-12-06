@@ -173,16 +173,18 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
 
       if (!existing) {
         console.log('Player not found, inserting...');
+        // 방장이면 자동으로 준비 완료 상태
+        const isHostPlayer = room?.host_id === userId;
         const { data: insertData, error: insertError } = await supabase
           .from('room_players')
           .insert({
             room_id: roomId,
             user_id: userId,
-            is_ready: false,
+            is_ready: isHostPlayer, // 방장은 자동으로 준비 완료
           })
           .select();
         
-        console.log('Insert result:', insertData, 'Error:', insertError);
+        console.log('Insert result:', insertData, 'Error:', insertError, 'Is host:', isHostPlayer);
         
         if (insertError) {
           console.error('Failed to insert player:', insertError);
@@ -217,8 +219,11 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
   const handleStartGame = async () => {
     if (!isHost || !room) return;
 
-    const allReady = players.every(p => p.is_ready);
-    if (!allReady) {
+    // 방장을 제외한 플레이어들이 모두 준비했는지 확인
+    const nonHostPlayers = players.filter(p => p.user_id !== room.host_id);
+    const allNonHostReady = nonHostPlayers.every(p => p.is_ready);
+    
+    if (nonHostPlayers.length > 0 && !allNonHostReady) {
       alert('모든 플레이어가 준비해야 게임을 시작할 수 있습니다.');
       return;
     }
@@ -314,8 +319,10 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
     );
   }
 
-  const allReady = players.every(p => p.is_ready);
-  const canStart = allReady && players.length >= 3;
+  // 방장을 제외한 플레이어들의 준비 상태 확인
+  const nonHostPlayers = players.filter(p => p.user_id !== room.host_id);
+  const allNonHostReady = nonHostPlayers.length === 0 || nonHostPlayers.every(p => p.is_ready);
+  const canStart = allNonHostReady && players.length >= 3;
 
   return (
     <div className="layout-container safe-area animate-fade-in" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
@@ -402,7 +409,7 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
             {isHost && (
               <div className="bg-gray-50" style={{ textAlign: 'center', padding: '8px 16px', borderRadius: '12px' }}>
                 <p className="text-sm font-semibold text-gray-700">
-                  {!allReady ? '모든 플레이어가 준비해야 합니다' : 
+                  {!allNonHostReady ? '모든 플레이어가 준비해야 합니다' : 
                    players.length < 3 ? '최소 3명이 필요합니다' : 
                    '게임을 시작할 수 있습니다'}
                 </p>
