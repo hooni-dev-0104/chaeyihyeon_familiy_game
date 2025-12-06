@@ -222,7 +222,10 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
   if (loading) {
     return (
       <div className="layout-container layout-center">
-        <div className="text-center text-gray-500">로딩 중...</div>
+        <div className="flex flex-col items-center gap-4">
+          <div className="spinner"></div>
+          <p className="text-white text-sm drop-shadow">로딩 중...</p>
+        </div>
       </div>
     );
   }
@@ -231,8 +234,9 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
     return (
       <div className="layout-container layout-center">
         <div className="text-center">
-          <p className="text-gray-500 mb-4">방을 찾을 수 없습니다.</p>
-          <button onClick={() => router.push('/games')} className="btn btn-primary w-auto px-6">
+          <div className="text-6xl mb-4">😢</div>
+          <p className="text-white text-lg font-bold drop-shadow mb-4">방을 찾을 수 없습니다</p>
+          <button onClick={() => router.push('/games')} className="btn btn-primary w-auto px-8">
             돌아가기
           </button>
         </div>
@@ -243,25 +247,29 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
   const allReady = players.every(p => p.is_ready);
   const canStart = allReady && players.length >= 3;
 
+  const gameColorClass = room.game_type === 'liar' 
+    ? 'from-emerald-400 to-blue-500' 
+    : 'from-purple-500 to-red-500';
+
   return (
-    <div className="layout-container safe-area">
-      <div className="section-gap flex-1">
+    <div className="layout-container safe-area animate-fade-in">
+      <div className="content-gap flex-1 flex flex-col">
         {/* 헤더 */}
-        <div className="flex items-center justify-between py-4">
+        <div className="flex items-center justify-between py-4 animate-slide-up">
           <div className="flex-1 min-w-0 pr-4">
-            <h1 className="text-xl font-bold text-gray-900 truncate">{room.name}</h1>
-            <div className="flex items-center gap-2 mt-1">
+            <h1 className="text-2xl font-bold text-white truncate drop-shadow-lg">{room.name}</h1>
+            <div className="flex items-center gap-2 mt-2">
               <span className={`badge ${room.game_type === 'liar' ? 'badge-blue' : 'badge-purple'}`}>
-                {room.game_type === 'liar' ? '라이어' : '마피아'}
+                {room.game_type === 'liar' ? '🎭 라이어' : '🔪 마피아'}
               </span>
-              <span className="text-sm text-gray-500 font-medium">
+              <span className="text-sm text-white/90 font-bold drop-shadow">
                 {players.length} / {room.max_players}명
               </span>
             </div>
           </div>
           <button
             onClick={handleLeaveRoom}
-            className="p-2 -mr-2 text-gray-400 hover:text-red-500 transition-colors rounded-full hover:bg-red-50"
+            className="p-3 -mr-2 text-white/80 hover:text-white hover:bg-white/20 transition-all rounded-full"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M18 6L6 18M6 6l12 12"/>
@@ -270,42 +278,45 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
         </div>
 
         {/* 플레이어 목록 */}
-        <div className="flex-1 overflow-y-auto no-scrollbar pb-24">
-          <div className="grid grid-cols-2 gap-3">
-            {players.map((player) => (
+        <div className="flex-1 overflow-y-auto no-scrollbar pb-32">
+          <div className="grid grid-cols-2 gap-4">
+            {players.map((player, index) => (
               <div
                 key={player.user_id}
-                className={`p-4 rounded-2xl border-2 transition-all ${
+                className={`p-5 rounded-3xl border-3 transition-all duration-300 animate-scale-in ${
                   player.is_ready 
-                    ? 'bg-green-50 border-green-200 ring-2 ring-green-500/10' 
-                    : 'bg-white border-gray-100'
+                    ? 'bg-white border-green-400 shadow-xl scale-105' 
+                    : 'bg-white/90 border-white/50 shadow-lg'
                 }`}
+                style={{ animationDelay: `${0.1 * index}s` }}
               >
-                <div className="flex flex-col items-center text-center gap-2">
-                  <div className={`w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold shadow-sm ${
-                    player.is_ready ? 'bg-green-500 text-white' : 'bg-gray-100 text-gray-400'
+                <div className="flex flex-col items-center text-center gap-3">
+                  <div className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl font-extrabold shadow-lg transition-all duration-300 ${
+                    player.is_ready 
+                      ? `bg-gradient-to-br ${gameColorClass} text-white animate-pulse-glow` 
+                      : 'bg-gray-100 text-gray-400'
                   }`}>
                     {player.nickname.charAt(0)}
                   </div>
                   <div className="min-w-0 w-full">
-                    <div className="font-bold text-gray-900 truncate mb-1">{player.nickname}</div>
-                    <div className="flex justify-center gap-1 flex-wrap">
+                    <div className="font-bold text-base text-gray-900 truncate mb-2">{player.nickname}</div>
+                    <div className="flex justify-center gap-1.5 flex-wrap">
                       {room.host_id === player.user_id && (
-                        <span className="text-[10px] font-bold bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full">
-                          방장
+                        <span className="text-[10px] font-extrabold bg-yellow-100 text-yellow-700 px-2.5 py-1 rounded-full">
+                          👑 방장
                         </span>
                       )}
                       {player.user_id === user?.id && (
-                        <span className="text-[10px] font-bold bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">
-                          나
+                        <span className="text-[10px] font-extrabold bg-blue-100 text-blue-700 px-2.5 py-1 rounded-full">
+                          😎 나
                         </span>
                       )}
                     </div>
                   </div>
-                  <div className={`text-xs font-bold mt-1 ${
+                  <div className={`text-xs font-extrabold uppercase tracking-wide ${
                     player.is_ready ? 'text-green-600' : 'text-gray-400'
                   }`}>
-                    {player.is_ready ? '준비완료' : '대기중...'}
+                    {player.is_ready ? '✅ 준비완료' : '⏳ 대기중'}
                   </div>
                 </div>
               </div>
@@ -314,14 +325,14 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
         </div>
 
         {/* 하단 컨트롤 바 (고정) */}
-        <div className="fixed bottom-0 left-0 right-0 p-4 bg-white/90 backdrop-blur-md border-t border-gray-200 safe-area">
-          <div className="max-w-[480px] mx-auto flex flex-col gap-3">
+        <div className="fixed bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-black/50 to-transparent backdrop-blur-md safe-area">
+          <div className="max-w-[420px] mx-auto flex flex-col gap-4">
             {isHost && (
-              <div className="text-center">
-                <p className="text-xs text-gray-500">
-                  {!allReady ? '모든 플레이어가 준비해야 합니다' : 
-                   players.length < 3 ? '최소 3명이 필요합니다' : 
-                   '게임을 시작할 수 있습니다!'}
+              <div className="text-center bg-white/20 backdrop-blur-sm rounded-2xl py-3 px-4">
+                <p className="text-sm font-bold text-white drop-shadow">
+                  {!allReady ? '⏳ 모든 플레이어가 준비해야 합니다' : 
+                   players.length < 3 ? '👥 최소 3명이 필요합니다' : 
+                   '🎉 게임을 시작할 수 있습니다!'}
                 </p>
               </div>
             )}
@@ -329,21 +340,25 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
             {!isHost ? (
               <button
                 onClick={handleReady}
-                className={`btn w-full shadow-lg ${
-                  myPlayer?.is_ready ? 'btn-secondary' : 'btn-primary'
+                className={`btn w-full shadow-2xl ${
+                  myPlayer?.is_ready 
+                    ? 'btn-secondary' 
+                    : `bg-gradient-to-r ${gameColorClass} text-white`
                 }`}
               >
-                {myPlayer?.is_ready ? '준비 취소' : '준비하기'}
+                {myPlayer?.is_ready ? '❌ 준비 취소' : '✅ 준비하기'}
               </button>
             ) : (
               <button
                 onClick={handleStartGame}
                 disabled={!canStart}
-                className={`btn w-full shadow-lg ${
-                  canStart ? 'btn-primary' : 'btn-secondary opacity-50'
+                className={`btn w-full shadow-2xl font-extrabold text-lg ${
+                  canStart 
+                    ? `bg-gradient-to-r ${gameColorClass} text-white animate-pulse-glow` 
+                    : 'btn-secondary opacity-50 cursor-not-allowed'
                 }`}
               >
-                게임 시작
+                {canStart ? '🚀 게임 시작!' : '⏸️ 준비 대기중...'}
               </button>
             )}
           </div>

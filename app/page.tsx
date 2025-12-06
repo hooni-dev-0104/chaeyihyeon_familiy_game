@@ -38,18 +38,19 @@ export default function Home() {
   };
 
   return (
-    <div className="layout-container layout-center safe-area">
+    <div className="layout-container layout-center safe-area animate-fade-in">
       <div className="section-gap">
         {/* 헤더 섹션 */}
-        <div className="text-center py-2">
-          <h1 className="text-2xl font-bold text-gray-900 mb-1.5">가족 게임방</h1>
-          <p className="text-gray-500 text-sm">이현이네 × 채이네</p>
+        <div className="text-center py-4 animate-scale-in">
+          <div className="text-6xl mb-4 animate-bounce-subtle">🎮</div>
+          <h1 className="text-3xl font-bold text-white mb-2 drop-shadow-lg">가족 게임방</h1>
+          <p className="text-white/90 text-base drop-shadow">이현이네 × 채이네</p>
         </div>
 
         {/* 로그인 폼 */}
-        <form onSubmit={handleLogin} className="flex flex-col gap-5 w-full">
-          <div className="flex flex-col gap-3 w-full">
-            <div className="input-group">
+        <form onSubmit={handleLogin} className="flex flex-col gap-6 w-full">
+          <div className="flex flex-col gap-5 w-full">
+            <div className="input-group animate-slide-up animate-delay-1">
               <label className="input-label">이메일</label>
               <input
                 type="email"
@@ -63,7 +64,7 @@ export default function Home() {
               />
             </div>
 
-            <div className="input-group">
+            <div className="input-group animate-slide-up animate-delay-2">
               <label className="input-label">비밀번호</label>
               <input
                 type="password"
@@ -78,18 +79,25 @@ export default function Home() {
           </div>
 
           {error && (
-            <div className="p-3 bg-red-50 border border-red-100 rounded-xl text-red-600 text-xs text-center font-medium w-full">
+            <div className="p-4 bg-red-50 border-2 border-red-200 rounded-2xl text-red-600 text-sm text-center font-bold w-full animate-shake">
               {error}
             </div>
           )}
 
-          <div className="flex flex-col gap-3 w-full mt-1">
+          <div className="flex flex-col gap-4 w-full mt-2 animate-slide-up animate-delay-3">
             <button
               type="submit"
               disabled={loading}
               className="btn btn-primary"
             >
-              {loading ? '로그인 중...' : '로그인하기'}
+              {loading ? (
+                <div className="flex items-center gap-2">
+                  <div className="spinner-small"></div>
+                  <span>로그인 중...</span>
+                </div>
+              ) : (
+                '로그인하기'
+              )}
             </button>
             
             <Link href="/auth/signup" className="btn btn-secondary">
@@ -98,13 +106,8 @@ export default function Home() {
           </div>
         </form>
 
-        <div className="text-center text-xs text-gray-400 mt-1">
-          즐거운 가족 게임을 시작해보세요 🎮
-        </div>
-
-        {/* 디버깅용: 환경 변수 확인 (배포 후 삭제 예정) */}
-        <div className="text-[10px] text-gray-300 text-center break-all px-4">
-          DEBUG: {process.env.NEXT_PUBLIC_SUPABASE_URL?.substring(0, 20)}...
+        <div className="text-center text-sm text-white/80 mt-2 drop-shadow animate-slide-up animate-delay-4">
+          즐거운 가족 게임을 시작해보세요 🎉
         </div>
       </div>
     </div>

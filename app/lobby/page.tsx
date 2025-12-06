@@ -97,7 +97,10 @@ function LobbyContent() {
   if (loading) {
     return (
       <div className="layout-container layout-center">
-        <div className="text-center text-gray-500">로딩 중...</div>
+        <div className="flex flex-col items-center gap-4">
+          <div className="spinner"></div>
+          <p className="text-white text-sm drop-shadow">로딩 중...</p>
+        </div>
       </div>
     );
   }
@@ -106,48 +109,61 @@ function LobbyContent() {
     ? rooms.filter(r => r.game_type === selectedGameType)
     : rooms;
 
-  const gameTitle = selectedGameType === 'liar' ? '라이어 게임' : 
-                   selectedGameType === 'mafia' ? '마피아 게임' : '게임 로비';
+  const gameTitle = selectedGameType === 'liar' ? '🎭 라이어 게임' : 
+                   selectedGameType === 'mafia' ? '🔪 마피아 게임' : '🎮 게임 로비';
+
+  const gameColorClass = selectedGameType === 'liar' ? 'from-emerald-400 to-blue-500' :
+                        selectedGameType === 'mafia' ? 'from-purple-500 to-red-500' :
+                        'from-indigo-500 to-purple-500';
 
   return (
-    <div className="layout-container safe-area">
-      <div className="section-gap h-full">
+    <div className="layout-container safe-area animate-fade-in">
+      <div className="content-gap h-full flex flex-col">
         {/* 헤더 */}
-        <div className="flex items-center justify-between py-4">
-          <button onClick={handleBackToGames} className="p-2 -ml-2 text-gray-600 hover:bg-gray-100 rounded-full transition-colors">
+        <div className="flex items-center justify-between py-4 animate-slide-up">
+          <button 
+            onClick={handleBackToGames} 
+            className="p-3 -ml-2 text-white hover:bg-white/20 rounded-full transition-all duration-300 hover:scale-110"
+          >
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M19 12H5M12 19l-7-7 7-7"/>
             </svg>
           </button>
-          <h1 className="text-xl font-bold text-gray-900">{gameTitle}</h1>
-          <div className="w-10"></div> {/* 공간 균형용 */}
+          <h1 className="text-2xl font-bold text-white drop-shadow-lg">{gameTitle}</h1>
+          <div className="w-10"></div>
         </div>
 
         {/* 방 목록 */}
-        <div className="flex-1 overflow-hidden flex flex-col gap-4">
-          <div className="flex items-center justify-between px-1">
-            <h2 className="text-lg font-bold text-gray-800">
+        <div className="flex-1 overflow-hidden flex flex-col gap-5 animate-slide-up animate-delay-1">
+          <div className="flex items-center justify-between px-2">
+            <h2 className="text-lg font-bold text-white drop-shadow">
               대기 중인 방 ({filteredRooms.length})
             </h2>
           </div>
 
-          <div className="flex-1 overflow-y-auto no-scrollbar flex flex-col gap-3 pb-24">
+          <div className="flex-1 overflow-y-auto no-scrollbar flex flex-col gap-4 pb-28">
             {filteredRooms.length === 0 ? (
-              <div className="flex-1 flex flex-col items-center justify-center text-center py-12 px-6 bg-white rounded-2xl border border-dashed border-gray-200">
-                <div className="text-4xl mb-3">🎪</div>
-                <p className="text-gray-900 font-medium mb-1">아직 방이 없어요</p>
-                <p className="text-sm text-gray-500">첫 번째 방을 만들어보세요!</p>
+              <div className="flex-1 flex flex-col items-center justify-center text-center py-16 px-6 bg-white/10 backdrop-blur-sm rounded-3xl border-2 border-white/20">
+                <div className="text-6xl mb-4 animate-bounce-subtle">🎪</div>
+                <p className="text-white text-lg font-bold drop-shadow mb-2">아직 방이 없어요</p>
+                <p className="text-base text-white/80 drop-shadow">첫 번째 방을 만들어보세요!</p>
               </div>
             ) : (
-              filteredRooms.map((room) => (
-                <div key={room.id} className="card p-5 flex items-center justify-between gap-4">
+              filteredRooms.map((room, index) => (
+                <div 
+                  key={room.id} 
+                  className={`card p-6 flex items-center justify-between gap-4 card-interactive animate-slide-up`}
+                  style={{ animationDelay: `${0.1 * (index + 2)}s` }}
+                >
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-lg font-bold text-gray-900 truncate mb-1">{room.name}</h3>
-                    <div className="flex items-center gap-2">
-                      <span className={`badge ${room.status === 'waiting' ? 'badge-green' : 'badge-yellow'}`}>
-                        {room.status === 'waiting' ? '대기중' : '진행중'}
-                      </span>
-                      <span className="text-sm text-gray-500 font-medium">
+                    <h3 className="text-xl font-bold text-gray-900 truncate mb-2">{room.name}</h3>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      {room.status === 'waiting' ? (
+                        <span className="badge badge-green">대기중</span>
+                      ) : (
+                        <span className="badge badge-yellow">진행중</span>
+                      )}
+                      <span className="text-base text-gray-600 font-bold">
                         {(room as any).room_players?.[0]?.count || 0} / {room.max_players}명
                       </span>
                     </div>
@@ -155,12 +171,13 @@ function LobbyContent() {
                   <button
                     onClick={() => router.push(`/room/${room.id}`)}
                     disabled={room.status === 'playing'}
-                    className={`btn px-5 h-10 text-sm flex-shrink-0 w-auto ${
-                      room.status === 'waiting' ? 'btn-primary' : 'btn-secondary opacity-50'
+                    className={`px-6 py-3 rounded-2xl font-bold text-sm transition-all ${
+                      room.status === 'waiting' 
+                        ? `bg-gradient-to-r ${gameColorClass} text-white shadow-lg hover:shadow-xl hover:scale-105` 
+                        : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                     }`}
-                    style={{ minHeight: '44px' }}
                   >
-                    {room.status === 'waiting' ? '입장' : '관전'}
+                    {room.status === 'waiting' ? '입장 →' : '진행중'}
                   </button>
                 </div>
               ))
@@ -169,13 +186,13 @@ function LobbyContent() {
         </div>
 
         {/* 하단 버튼 (고정) */}
-        <div className="fixed bottom-0 left-0 right-0 p-4 bg-white/80 backdrop-blur-md border-t border-gray-200 safe-area">
-          <div className="max-w-[400px] mx-auto">
+        <div className="fixed bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-black/40 to-transparent backdrop-blur-md safe-area">
+          <div className="max-width: 420px; mx-auto">
             <button
               onClick={() => setShowCreateModal(true)}
-              className="btn btn-primary w-full shadow-lg"
+              className={`btn bg-gradient-to-r ${gameColorClass} text-white shadow-2xl w-full font-extrabold text-lg animate-pulse-glow`}
             >
-              + 새 방 만들기
+              ✨ 새 방 만들기
             </button>
           </div>
         </div>
@@ -201,7 +218,10 @@ export default function LobbyPage() {
   return (
     <Suspense fallback={
       <div className="layout-container layout-center">
-        <div className="text-center text-gray-500">로딩 중...</div>
+        <div className="flex flex-col items-center gap-4">
+          <div className="spinner"></div>
+          <p className="text-white text-sm drop-shadow">로딩 중...</p>
+        </div>
       </div>
     }>
       <LobbyContent />
@@ -260,20 +280,21 @@ function CreateRoomModal({ onClose, userId, defaultGameType, onRoomCreated }: Cr
   };
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center z-50 safe-area">
-      <div className="bg-white w-full max-w-[400px] rounded-t-3xl sm:rounded-3xl p-6 animate-slide-up max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-end sm:items-center justify-center z-50 safe-area animate-fade-in">
+      <div className="bg-white w-full max-w-[420px] rounded-t-3xl sm:rounded-3xl p-7 animate-slide-up max-h-[90vh] overflow-y-auto shadow-2xl">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-gray-900">새 게임 방 만들기</h2>
-          <button onClick={onClose} className="p-2 -mr-2 text-gray-400 hover:text-gray-600">
+          <h2 className="text-2xl font-bold text-gray-900">새 게임 방 만들기</h2>
+          <button 
+            onClick={onClose} 
+            className="p-2 -mr-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-all"
+          >
             ✕
           </button>
         </div>
         
         <form onSubmit={handleCreate} className="form-gap">
-          <div>
-            <label className="block text-xs font-semibold text-gray-700 mb-2 ml-1">
-              방 이름
-            </label>
+          <div className="input-group">
+            <label className="input-label">방 이름</label>
             <input
               type="text"
               value={roomName}
@@ -285,35 +306,35 @@ function CreateRoomModal({ onClose, userId, defaultGameType, onRoomCreated }: Cr
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-gray-700 mb-3 ml-1">
+            <label className="block text-sm font-bold text-gray-700 mb-4 ml-1">
               게임 선택
             </label>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-4">
               <button
                 type="button"
                 onClick={() => setGameType('liar')}
-                className={`p-4 rounded-2xl border-2 text-center transition-all ${
+                className={`p-5 rounded-3xl border-3 text-center transition-all ${
                   gameType === 'liar'
-                    ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-500/20 ring-offset-0'
-                    : 'border-gray-200 bg-white hover:border-gray-300'
+                    ? 'border-emerald-400 bg-gradient-to-br from-emerald-50 to-blue-50 shadow-lg scale-105'
+                    : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-md'
                 }`}
               >
-                <div className="text-3xl mb-2">🎭</div>
-                <div className={`font-bold text-sm ${gameType === 'liar' ? 'text-blue-600' : 'text-gray-600'}`}>
+                <div className="text-4xl mb-2">🎭</div>
+                <div className={`font-bold text-base ${gameType === 'liar' ? 'text-emerald-600' : 'text-gray-600'}`}>
                   라이어 게임
                 </div>
               </button>
               <button
                 type="button"
                 onClick={() => setGameType('mafia')}
-                className={`p-4 rounded-2xl border-2 text-center transition-all ${
+                className={`p-5 rounded-3xl border-3 text-center transition-all ${
                   gameType === 'mafia'
-                    ? 'border-purple-500 bg-purple-50 ring-2 ring-purple-500/20 ring-offset-0'
-                    : 'border-gray-200 bg-white hover:border-gray-300'
+                    ? 'border-purple-400 bg-gradient-to-br from-purple-50 to-red-50 shadow-lg scale-105'
+                    : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-md'
                 }`}
               >
-                <div className="text-3xl mb-2">🔪</div>
-                <div className={`font-bold text-sm ${gameType === 'mafia' ? 'text-purple-600' : 'text-gray-600'}`}>
+                <div className="text-4xl mb-2">🔪</div>
+                <div className={`font-bold text-base ${gameType === 'mafia' ? 'text-purple-600' : 'text-gray-600'}`}>
                   마피아 게임
                 </div>
               </button>
@@ -321,9 +342,9 @@ function CreateRoomModal({ onClose, userId, defaultGameType, onRoomCreated }: Cr
           </div>
 
           <div>
-            <div className="flex justify-between items-center mb-3 ml-1">
-              <label className="text-xs font-semibold text-gray-700">최대 인원</label>
-              <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-lg">
+            <div className="flex justify-between items-center mb-4 ml-1">
+              <label className="text-sm font-bold text-gray-700">최대 인원</label>
+              <span className="text-base font-extrabold text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-xl">
                 {maxPlayers}명
               </span>
             </div>
@@ -333,15 +354,15 @@ function CreateRoomModal({ onClose, userId, defaultGameType, onRoomCreated }: Cr
               max="12"
               value={maxPlayers}
               onChange={(e) => setMaxPlayers(Number(e.target.value))}
-              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+              className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
             />
-            <div className="flex justify-between text-xs text-gray-400 mt-2 px-1">
+            <div className="flex justify-between text-xs text-gray-400 mt-3 px-1">
               <span>4명</span>
               <span>12명</span>
             </div>
           </div>
 
-          <div className="flex gap-3 mt-4">
+          <div className="flex gap-4 mt-6">
             <button
               type="button"
               onClick={onClose}
@@ -354,7 +375,14 @@ function CreateRoomModal({ onClose, userId, defaultGameType, onRoomCreated }: Cr
               disabled={loading}
               className="btn btn-primary flex-1"
             >
-              {loading ? '생성 중...' : '방 만들기'}
+              {loading ? (
+                <div className="flex items-center gap-2">
+                  <div className="spinner-small"></div>
+                  <span>생성 중...</span>
+                </div>
+              ) : (
+                '방 만들기 🚀'
+              )}
             </button>
           </div>
         </form>
