@@ -60,63 +60,72 @@ export default function GamesPage() {
   }
 
   return (
-    <div className="layout-container safe-area animate-fade-in" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '16px', padding: '16px 0' }}>
+    <div className="layout-container safe-area animate-fade-in" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', paddingTop: '20px', paddingBottom: '20px' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         {/* 헤더 */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">게임 선택</h1>
-            <p className="text-sm text-gray-600" style={{ marginTop: '4px' }}>{profile?.nickname}님, 환영합니다</p>
-          </div>
+        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
+          <h1 className="text-2xl font-bold text-gray-900">게임 선택</h1>
           <button 
             onClick={handleLogout} 
-            className="text-sm text-gray-500 font-medium hover:text-gray-700 transition-colors"
-            style={{ padding: '8px 12px' }}
+            className="btn-secondary"
+            style={{ padding: '8px 16px', fontSize: '14px', borderRadius: '8px', fontWeight: '500' }}
           >
             로그아웃
           </button>
         </div>
 
+        {/* 환영 메시지 카드 */}
+        <div className="card" style={{ padding: '16px 20px', marginBottom: '24px', background: 'linear-gradient(135deg, #FEE500 0%, #FFEB3B 100%)' }}>
+          <p className="font-bold" style={{ color: '#3C1E1E', fontSize: '16px' }}>
+            👋 {profile?.nickname}님, 환영합니다!
+          </p>
+        </div>
+
         {/* 게임 목록 */}
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '16px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '20px' }}>
           <Link 
             href="/lobby?game=liar" 
             className="card card-interactive"
-            style={{ padding: '24px', display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '20px' }}
+            style={{ padding: '20px', display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '16px' }}
           >
-            <div style={{ width: '64px', height: '64px', borderRadius: '16px', background: '#dbeafe', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '36px', flexShrink: 0 }}>
+            <div style={{ width: '56px', height: '56px', borderRadius: '14px', background: '#EBF4FF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '32px', flexShrink: 0 }}>
               🎭
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <h3 className="text-xl font-bold text-gray-900" style={{ marginBottom: '4px' }}>라이어 게임</h3>
-              <p className="text-sm text-gray-600">거짓말쟁이를 찾아내세요</p>
+              <h3 className="font-bold text-gray-900" style={{ fontSize: '18px', marginBottom: '4px' }}>라이어 게임</h3>
+              <p className="text-gray-600" style={{ fontSize: '13px' }}>거짓말쟁이를 찾아내세요</p>
             </div>
-            <svg style={{ width: '24px', height: '24px', color: '#9ca3af', flexShrink: 0 }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/>
+            <svg style={{ width: '20px', height: '20px', color: '#9ca3af', flexShrink: 0 }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7"/>
             </svg>
           </Link>
 
           <Link 
             href="/lobby?game=mafia" 
             className="card card-interactive"
-            style={{ padding: '24px', display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '20px' }}
+            style={{ padding: '20px', display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '16px' }}
           >
-            <div style={{ width: '64px', height: '64px', borderRadius: '16px', background: '#f3e8ff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '36px', flexShrink: 0 }}>
+            <div style={{ width: '56px', height: '56px', borderRadius: '14px', background: '#F5F0FF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '32px', flexShrink: 0 }}>
               🔪
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <h3 className="text-xl font-bold text-gray-900" style={{ marginBottom: '4px' }}>마피아 게임</h3>
-              <p className="text-sm text-gray-600">AI 사회자와 함께하는 추리</p>
+              <h3 className="font-bold text-gray-900" style={{ fontSize: '18px', marginBottom: '4px' }}>마피아 게임</h3>
+              <p className="text-gray-600" style={{ fontSize: '13px' }}>AI 사회자와 함께하는 추리</p>
             </div>
-            <svg style={{ width: '24px', height: '24px', color: '#9ca3af', flexShrink: 0 }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/>
+            <svg style={{ width: '20px', height: '20px', color: '#9ca3af', flexShrink: 0 }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7"/>
             </svg>
           </Link>
         </div>
 
         {/* 하단 안내 */}
-        <div className="bg-gray-50 rounded-xl text-center" style={{ marginTop: '24px', padding: '16px' }}>
-          <p className="text-sm text-gray-600">3명 이상 모여서 플레이하세요</p>
+        <div className="card" style={{ marginTop: 'auto', padding: '16px', textAlign: 'center', background: '#F9FAFB', border: '1px solid #E5E7EB' }}>
+          <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+            <svg style={{ width: '16px', height: '16px', color: '#6B7280' }} fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
+            </svg>
+            <p className="text-gray-600 font-medium" style={{ fontSize: '13px' }}>3명 이상 모여서 플레이하세요</p>
+          </div>
         </div>
       </div>
     </div>
