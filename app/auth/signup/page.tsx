@@ -77,8 +77,8 @@ export default function SignupPage() {
         </div>
 
         {/* 입력 폼 */}
-        <form onSubmit={handleSignup} className="flex flex-col gap-6 w-full">
-          <div className="input-container">
+        <form onSubmit={handleSignup} className="flex flex-col w-full">
+          <div className="input-container mb-8">
             <div className="input-group">
               <label className="input-label">닉네임</label>
               <input
@@ -134,7 +134,7 @@ export default function SignupPage() {
           </div>
 
           {error && (
-            <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm text-center font-semibold">
+            <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm text-center font-semibold mb-6">
               {error}
             </div>
           )}

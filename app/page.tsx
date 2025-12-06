@@ -48,8 +48,8 @@ export default function Home() {
         </div>
 
         {/* 로그인 폼 */}
-        <form onSubmit={handleLogin} className="flex flex-col gap-6 w-full">
-          <div className="input-container">
+        <form onSubmit={handleLogin} className="flex flex-col w-full">
+          <div className="input-container mb-8">
             <div className="input-group">
               <label className="input-label">이메일</label>
               <input
@@ -79,7 +79,7 @@ export default function Home() {
           </div>
 
           {error && (
-            <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm text-center font-semibold">
+            <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm text-center font-semibold mb-6">
               {error}
             </div>
           )}
@@ -106,7 +106,7 @@ export default function Home() {
           </div>
         </form>
 
-        <div className="text-center text-sm text-gray-500 mt-4">
+        <div className="text-center text-sm text-gray-500 mt-8">
           가족과 함께 즐거운 시간을 보내세요
         </div>
       </div>
