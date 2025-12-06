@@ -358,26 +358,14 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
                 style={{ padding: '16px' }}
               >
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '12px' }}>
-                  <div className={`${
-                    player.is_ready 
-                      ? 'bg-line-green text-white' 
-                      : 'bg-gray-100 text-gray-400'
-                  }`}
-                  style={{
-                    width: '56px',
-                    height: '56px',
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '20px',
-                    fontWeight: 'bold',
+                  <div style={{
+                    fontSize: '40px',
                     flexShrink: 0
                   }}>
-                    {player.nickname.charAt(0)}
+                    👤
                   </div>
                   <div style={{ minWidth: 0, width: '100%' }}>
-                    <div className="font-bold text-gray-900" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginBottom: '6px' }}>{player.nickname}</div>
+                    <div className="font-bold text-gray-900" style={{ fontSize: '16px', marginBottom: '8px', wordBreak: 'break-word' }}>{player.nickname}</div>
                     <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: '4px', flexWrap: 'wrap', marginBottom: '8px' }}>
                       {room.host_id === player.user_id && (
                         <span className="badge badge-yellow" style={{ fontSize: '10px' }}>
@@ -390,9 +378,15 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
                         </span>
                       )}
                     </div>
-                    <div className={`text-xs font-bold ${
-                      player.is_ready ? 'text-green-600' : 'text-gray-400'
-                    }`}>
+                    <div style={{
+                      display: 'inline-block',
+                      padding: '4px 12px',
+                      borderRadius: '12px',
+                      fontSize: '12px',
+                      fontWeight: 'bold',
+                      background: player.is_ready ? '#00B900' : '#E5E7EB',
+                      color: player.is_ready ? 'white' : '#9CA3AF'
+                    }}>
                       {player.is_ready ? '준비완료' : '대기중'}
                     </div>
                   </div>
