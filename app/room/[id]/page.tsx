@@ -108,26 +108,41 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
     try {
       console.log('Fetching players for room:', roomId);
       
-      const { data, error } = await supabase
+      // room_players 데이터 가져오기
+      const { data: roomPlayersData, error: roomPlayersError } = await supabase
         .from('room_players')
-        .select(`
-          *,
-          profiles:user_id (nickname)
-        `)
+        .select('*')
         .eq('room_id', roomId);
 
-      console.log('Players data:', data, 'Error:', error);
+      console.log('Room players data:', roomPlayersData, 'Error:', roomPlayersError);
 
-      if (error) throw error;
+      if (roomPlayersError) throw roomPlayersError;
 
-      const playersList = (data || []).map(p => ({
-        id: p.user_id,
-        nickname: (p.profiles as any)?.nickname || 'Unknown',
-        is_ready: p.is_ready,
-        room_id: p.room_id,
-        user_id: p.user_id,
-        joined_at: p.joined_at,
-      }));
+      if (!roomPlayersData || roomPlayersData.length === 0) {
+        console.log('No players found in room');
+        setPlayers([]);
+        return;
+      }
+
+      // 각 플레이어의 프로필 정보 가져오기
+      const playersList = await Promise.all(
+        roomPlayersData.map(async (rp) => {
+          const { data: profileData } = await supabase
+            .from('profiles')
+            .select('nickname')
+            .eq('id', rp.user_id)
+            .single();
+
+          return {
+            id: rp.user_id,
+            nickname: profileData?.nickname || 'Unknown',
+            is_ready: rp.is_ready,
+            room_id: rp.room_id,
+            user_id: rp.user_id,
+            joined_at: rp.joined_at,
+          };
+        })
+      );
 
       console.log('Processed players list:', playersList);
 
