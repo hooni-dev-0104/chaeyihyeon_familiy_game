@@ -84,3 +84,4 @@ supabase/.temp/
 /tmp/
 /temp/
 *.local
+.env*.local
