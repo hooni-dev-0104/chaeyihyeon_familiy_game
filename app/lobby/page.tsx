@@ -122,8 +122,23 @@ function LobbyContent() {
         })
       );
       
-      console.log('Final rooms with players:', roomsWithPlayers);
-      setRooms(roomsWithPlayers);
+      // 플레이어가 0명인 방 필터링 및 삭제
+      const validRooms = roomsWithPlayers.filter(room => room.player_count > 0);
+      const emptyRoomIds = roomsWithPlayers
+        .filter(room => room.player_count === 0)
+        .map(room => room.id);
+      
+      // 빈 방들을 데이터베이스에서 삭제
+      if (emptyRoomIds.length > 0) {
+        console.log('Deleting empty rooms:', emptyRoomIds);
+        await supabase
+          .from('rooms')
+          .delete()
+          .in('id', emptyRoomIds);
+      }
+      
+      console.log('Final valid rooms:', validRooms);
+      setRooms(validRooms);
     } catch (error) {
       console.error('Error fetching rooms:', error);
     }
@@ -321,7 +336,9 @@ function CreateRoomModal({ onClose, userId, defaultGameType, onRoomCreated }: Cr
     setLoading(true);
 
     try {
-      const { data: room, error } = await supabase
+      console.log('Creating room:', { roomName, gameType, maxPlayers, userId });
+      
+      const { data: room, error: roomError } = await supabase
         .from('rooms')
         .insert({
           name: roomName,
@@ -333,14 +350,30 @@ function CreateRoomModal({ onClose, userId, defaultGameType, onRoomCreated }: Cr
         .select()
         .single();
 
-      if (error) throw error;
+      console.log('Room created:', room, 'Error:', roomError);
 
-      await supabase.from('room_players').insert({
-        room_id: room.id,
-        user_id: userId,
-        is_ready: true,
-      });
+      if (roomError) throw roomError;
 
+      console.log('Adding host to room_players...');
+      const { data: playerData, error: playerError } = await supabase
+        .from('room_players')
+        .insert({
+          room_id: room.id,
+          user_id: userId,
+          is_ready: true,
+        })
+        .select();
+
+      console.log('Player added:', playerData, 'Error:', playerError);
+
+      if (playerError) {
+        console.error('Failed to add player to room, deleting room...');
+        // 플레이어 추가 실패 시 방 삭제
+        await supabase.from('rooms').delete().eq('id', room.id);
+        throw playerError;
+      }
+
+      console.log('Room creation successful!');
       onRoomCreated(room.id);
     } catch (error) {
       console.error('Error creating room:', error);
