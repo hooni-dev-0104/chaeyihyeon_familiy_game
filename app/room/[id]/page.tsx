@@ -177,33 +177,35 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
         return;
       }
 
-      console.log('➕ Player not found, inserting...');
+      console.log('➕ Player not found, using UPSERT...');
       // 방장이면 자동으로 준비 완료 상태
       const isHostPlayer = room?.host_id === userId;
-      const { data: insertData, error: insertError } = await supabase
+      
+      // UPSERT: 있으면 업데이트, 없으면 삽입
+      const { data: upsertData, error: upsertError } = await supabase
         .from('room_players')
-        .insert({
+        .upsert({
           room_id: roomId,
           user_id: userId,
           is_ready: isHostPlayer, // 방장은 자동으로 준비 완료
+        }, {
+          onConflict: 'room_id,user_id' // 중복 시 업데이트
         })
         .select();
       
-      console.log('Insert result:', insertData);
-      console.log('Insert error:', insertError);
+      console.log('Upsert result:', upsertData);
+      console.log('Upsert error:', upsertError);
       console.log('Is host:', isHostPlayer);
       
-      if (insertError) {
-        console.error('❌ Failed to insert player:', insertError);
-        console.error('Error details:', JSON.stringify(insertError, null, 2));
-        // 중복 키 에러는 무시 (이미 존재하는 경우)
-        if (insertError.code !== '23505') {
-          alert(`플레이어 추가 실패: ${insertError.message}`);
-        }
+      if (upsertError) {
+        console.error('❌ Failed to upsert player:', upsertError);
+        alert(`플레이어 추가 실패: ${upsertError.message}`);
       } else {
-        console.log('✅ Player joined successfully!');
-        await fetchPlayers();
+        console.log('✅ Player joined/updated successfully!');
       }
+      
+      // 항상 플레이어 목록 새로고침
+      await fetchPlayers();
     } catch (error: any) {
       console.error('❌ Exception in joinRoom:', error);
       console.error('Exception details:', JSON.stringify(error, null, 2));
