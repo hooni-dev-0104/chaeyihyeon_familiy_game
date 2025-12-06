@@ -212,26 +212,46 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
       ));
       setMyPlayer(prev => prev ? { ...prev, is_ready: newReadyState } : null);
 
-      console.log('Updating ready status:', user.id, 'to', newReadyState);
+      console.log('=== Ready Status Update ===');
+      console.log('User ID:', user.id);
+      console.log('Room ID:', roomId);
+      console.log('New ready state:', newReadyState);
+      console.log('My player before update:', myPlayer);
 
       // 서버 업데이트
-      const { error } = await supabase
+      const { data: updateResult, error: updateError } = await supabase
         .from('room_players')
         .update({ is_ready: newReadyState })
         .eq('room_id', roomId)
-        .eq('user_id', user.id);
+        .eq('user_id', user.id)
+        .select();
 
-      if (error) {
-        console.error('Error updating ready status:', error);
+      console.log('Update result:', updateResult);
+      console.log('Update error:', updateError);
+
+      if (updateError) {
+        console.error('❌ Failed to update ready status:', updateError);
+        alert(`준비 상태 업데이트 실패: ${updateError.message}`);
         // 에러 시 이전 상태로 복원
         await fetchPlayers();
-      } else {
-        console.log('Ready status updated successfully');
-        // 성공 시에도 서버 상태 재확인
-        await fetchPlayers();
+        return;
       }
-    } catch (error) {
-      console.error('Error updating ready status:', error);
+
+      if (!updateResult || updateResult.length === 0) {
+        console.warn('⚠️ No rows updated. Player might not exist in room_players table.');
+        // 플레이어가 테이블에 없는 경우 다시 조인 시도
+        console.log('Attempting to rejoin room...');
+        await joinRoom(user.id);
+        await fetchPlayers();
+        return;
+      }
+
+      console.log('✅ Ready status updated successfully');
+      // 성공 시에도 서버 상태 재확인
+      await fetchPlayers();
+    } catch (error: any) {
+      console.error('❌ Exception in handleReady:', error);
+      alert(`오류 발생: ${error?.message || 'Unknown error'}`);
       // 에러 시 이전 상태로 복원
       await fetchPlayers();
     }
