@@ -160,43 +160,53 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
 
   const joinRoom = async (userId: string) => {
     try {
-      console.log('Attempting to join room:', roomId, 'User:', userId);
+      console.log('🔍 Attempting to join room:', roomId, 'User:', userId);
       
-      const { data: existing, error: checkError } = await supabase
+      // .single() 제거 - 배열로 받아서 확인
+      const { data: existingPlayers, error: checkError } = await supabase
         .from('room_players')
         .select('*')
         .eq('room_id', roomId)
-        .eq('user_id', userId)
-        .single();
+        .eq('user_id', userId);
 
-      console.log('Existing player check:', existing, 'Error:', checkError);
+      console.log('Existing players:', existingPlayers, 'Check error:', checkError);
 
-      if (!existing) {
-        console.log('Player not found, inserting...');
-        // 방장이면 자동으로 준비 완료 상태
-        const isHostPlayer = room?.host_id === userId;
-        const { data: insertData, error: insertError } = await supabase
-          .from('room_players')
-          .insert({
-            room_id: roomId,
-            user_id: userId,
-            is_ready: isHostPlayer, // 방장은 자동으로 준비 완료
-          })
-          .select();
-        
-        console.log('Insert result:', insertData, 'Error:', insertError, 'Is host:', isHostPlayer);
-        
-        if (insertError) {
-          console.error('Failed to insert player:', insertError);
-        } else {
-          console.log('Player joined successfully!');
-          await fetchPlayers();
+      // 플레이어가 이미 존재하는지 확인
+      if (existingPlayers && existingPlayers.length > 0) {
+        console.log('✅ Player already in room, skipping insert');
+        return;
+      }
+
+      console.log('➕ Player not found, inserting...');
+      // 방장이면 자동으로 준비 완료 상태
+      const isHostPlayer = room?.host_id === userId;
+      const { data: insertData, error: insertError } = await supabase
+        .from('room_players')
+        .insert({
+          room_id: roomId,
+          user_id: userId,
+          is_ready: isHostPlayer, // 방장은 자동으로 준비 완료
+        })
+        .select();
+      
+      console.log('Insert result:', insertData);
+      console.log('Insert error:', insertError);
+      console.log('Is host:', isHostPlayer);
+      
+      if (insertError) {
+        console.error('❌ Failed to insert player:', insertError);
+        console.error('Error details:', JSON.stringify(insertError, null, 2));
+        // 중복 키 에러는 무시 (이미 존재하는 경우)
+        if (insertError.code !== '23505') {
+          alert(`플레이어 추가 실패: ${insertError.message}`);
         }
       } else {
-        console.log('Player already in room');
+        console.log('✅ Player joined successfully!');
+        await fetchPlayers();
       }
-    } catch (error) {
-      console.error('Error joining room:', error);
+    } catch (error: any) {
+      console.error('❌ Exception in joinRoom:', error);
+      console.error('Exception details:', JSON.stringify(error, null, 2));
     }
   };
 
