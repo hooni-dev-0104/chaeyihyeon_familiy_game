@@ -200,16 +200,30 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
     if (!user) return;
 
     try {
+      // 플레이어 삭제
       await supabase
         .from('room_players')
         .delete()
         .eq('room_id', roomId)
         .eq('user_id', user.id);
 
-      if (isHost) {
+      // 남은 플레이어 수 확인
+      const { data: remainingPlayers } = await supabase
+        .from('room_players')
+        .select('*')
+        .eq('room_id', roomId);
+
+      // 마지막 사람이 나갔으면 방 삭제
+      if (!remainingPlayers || remainingPlayers.length === 0) {
         await supabase
           .from('rooms')
           .delete()
+          .eq('id', roomId);
+      } else if (isHost) {
+        // 방장이 나갔지만 다른 사람이 있으면 첫 번째 사람을 새 방장으로
+        await supabase
+          .from('rooms')
+          .update({ host_id: remainingPlayers[0].user_id })
           .eq('id', roomId);
       }
 
