@@ -48,32 +48,34 @@ export default function Home() {
         </div>
 
         {/* 로그인 폼 */}
-        <form onSubmit={handleLogin} className="flex flex-col gap-4 w-full">
-          <div className="input-group">
-            <label className="input-label">이메일</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="input"
-              placeholder="이메일을 입력하세요"
-              autoComplete="email"
-              inputMode="email"
-            />
-          </div>
+        <form onSubmit={handleLogin} className="flex flex-col gap-6 w-full">
+          <div className="input-container">
+            <div className="input-group">
+              <label className="input-label">이메일</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="input"
+                placeholder="이메일을 입력하세요"
+                autoComplete="email"
+                inputMode="email"
+              />
+            </div>
 
-          <div className="input-group">
-            <label className="input-label">비밀번호</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="input"
-              placeholder="비밀번호를 입력하세요"
-              autoComplete="current-password"
-            />
+            <div className="input-group">
+              <label className="input-label">비밀번호</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="input"
+                placeholder="비밀번호를 입력하세요"
+                autoComplete="current-password"
+              />
+            </div>
           </div>
 
           {error && (
@@ -82,27 +84,29 @@ export default function Home() {
             </div>
           )}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="btn btn-primary mt-2"
-          >
-            {loading ? (
-              <div className="flex items-center gap-2">
-                <div className="spinner-small"></div>
-                <span>로그인 중...</span>
-              </div>
-            ) : (
-              '로그인'
-            )}
-          </button>
-          
-          <Link href="/auth/signup" className="btn btn-secondary">
-            회원가입
-          </Link>
+          <div className="flex flex-col gap-3">
+            <button
+              type="submit"
+              disabled={loading}
+              className="btn btn-primary"
+            >
+              {loading ? (
+                <div className="flex items-center gap-2">
+                  <div className="spinner-small"></div>
+                  <span>로그인 중...</span>
+                </div>
+              ) : (
+                '로그인'
+              )}
+            </button>
+            
+            <Link href="/auth/signup" className="btn btn-secondary">
+              회원가입
+            </Link>
+          </div>
         </form>
 
-        <div className="text-center text-sm text-gray-500 mt-6">
+        <div className="text-center text-sm text-gray-500 mt-4">
           가족과 함께 즐거운 시간을 보내세요
         </div>
       </div>

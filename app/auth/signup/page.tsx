@@ -77,58 +77,60 @@ export default function SignupPage() {
         </div>
 
         {/* 입력 폼 */}
-        <form onSubmit={handleSignup} className="flex flex-col gap-4 w-full">
-          <div className="input-group">
-            <label className="input-label">닉네임</label>
-            <input
-              type="text"
-              value={nickname}
-              onChange={(e) => setNickname(e.target.value)}
-              required
-              className="input"
-              placeholder="게임에서 사용할 이름"
-              autoComplete="nickname"
-            />
-          </div>
+        <form onSubmit={handleSignup} className="flex flex-col gap-6 w-full">
+          <div className="input-container">
+            <div className="input-group">
+              <label className="input-label">닉네임</label>
+              <input
+                type="text"
+                value={nickname}
+                onChange={(e) => setNickname(e.target.value)}
+                required
+                className="input"
+                placeholder="게임에서 사용할 이름"
+                autoComplete="nickname"
+              />
+            </div>
 
-          <div className="input-group">
-            <label className="input-label">이메일</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="input"
-              placeholder="이메일을 입력하세요"
-              autoComplete="email"
-              inputMode="email"
-            />
-          </div>
+            <div className="input-group">
+              <label className="input-label">이메일</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="input"
+                placeholder="이메일을 입력하세요"
+                autoComplete="email"
+                inputMode="email"
+              />
+            </div>
 
-          <div className="input-group">
-            <label className="input-label">비밀번호</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="input"
-              placeholder="최소 6자 이상"
-              autoComplete="new-password"
-            />
-          </div>
+            <div className="input-group">
+              <label className="input-label">비밀번호</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="input"
+                placeholder="최소 6자 이상"
+                autoComplete="new-password"
+              />
+            </div>
 
-          <div className="input-group">
-            <label className="input-label">비밀번호 확인</label>
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-              className="input"
-              placeholder="비밀번호를 다시 입력하세요"
-              autoComplete="new-password"
-            />
+            <div className="input-group">
+              <label className="input-label">비밀번호 확인</label>
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                className="input"
+                placeholder="비밀번호를 다시 입력하세요"
+                autoComplete="new-password"
+              />
+            </div>
           </div>
 
           {error && (
@@ -140,7 +142,7 @@ export default function SignupPage() {
           <button
             type="submit"
             disabled={loading}
-            className="btn btn-primary mt-2"
+            className="btn btn-primary"
           >
             {loading ? (
               <div className="flex items-center gap-2">
