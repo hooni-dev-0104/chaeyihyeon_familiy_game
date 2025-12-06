@@ -25,25 +25,41 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
   useEffect(() => {
     checkUserAndJoin();
     
+    // 실시간 구독 설정
     const roomChannel = supabase
-      .channel(`room-${roomId}`)
+      .channel(`room-${roomId}`, {
+        config: {
+          broadcast: { self: true },
+        },
+      })
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'rooms', filter: `id=eq.${roomId}` },
-        () => {
+        (payload) => {
+          console.log('Room changed:', payload);
           fetchRoom();
         }
       )
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'room_players', filter: `room_id=eq.${roomId}` },
-        () => {
+        (payload) => {
+          console.log('Players changed:', payload);
           fetchPlayers();
         }
       )
-      .subscribe();
+      .subscribe((status) => {
+        console.log('Subscription status:', status);
+      });
+
+    // 폴링을 추가로 구현 (Realtime이 느릴 경우 대비)
+    const pollingInterval = setInterval(() => {
+      fetchPlayers();
+      fetchRoom();
+    }, 3000); // 3초마다 새로고침
 
     return () => {
+      clearInterval(pollingInterval);
       supabase.removeChannel(roomChannel);
     };
   }, [roomId]);
