@@ -84,7 +84,7 @@ export default function Home() {
             </div>
           )}
 
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col" style={{ gap: '20px' }}>
             <button
               type="submit"
               disabled={loading}
