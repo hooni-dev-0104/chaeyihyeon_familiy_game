@@ -101,6 +101,11 @@ export default function Home() {
         <div className="text-center text-xs text-gray-400 mt-1">
           즐거운 가족 게임을 시작해보세요 🎮
         </div>
+
+        {/* 디버깅용: 환경 변수 확인 (배포 후 삭제 예정) */}
+        <div className="text-[10px] text-gray-300 text-center break-all px-4">
+          DEBUG: {process.env.NEXT_PUBLIC_SUPABASE_URL?.substring(0, 20)}...
+        </div>
       </div>
     </div>
   );
