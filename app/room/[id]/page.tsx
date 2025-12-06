@@ -203,16 +203,37 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
   const handleReady = async () => {
     if (!user || !myPlayer) return;
 
+    const newReadyState = !myPlayer.is_ready;
+
     try {
-      await supabase
+      // Optimistic update - 즉시 UI 업데이트
+      setPlayers(prev => prev.map(p => 
+        p.user_id === user.id ? { ...p, is_ready: newReadyState } : p
+      ));
+      setMyPlayer(prev => prev ? { ...prev, is_ready: newReadyState } : null);
+
+      console.log('Updating ready status:', user.id, 'to', newReadyState);
+
+      // 서버 업데이트
+      const { error } = await supabase
         .from('room_players')
-        .update({ is_ready: !myPlayer.is_ready })
+        .update({ is_ready: newReadyState })
         .eq('room_id', roomId)
         .eq('user_id', user.id);
 
-      await fetchPlayers();
+      if (error) {
+        console.error('Error updating ready status:', error);
+        // 에러 시 이전 상태로 복원
+        await fetchPlayers();
+      } else {
+        console.log('Ready status updated successfully');
+        // 성공 시에도 서버 상태 재확인
+        await fetchPlayers();
+      }
     } catch (error) {
       console.error('Error updating ready status:', error);
+      // 에러 시 이전 상태로 복원
+      await fetchPlayers();
     }
   };
 
@@ -357,22 +378,32 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
             {players.map((player) => (
               <div
                 key={player.user_id}
-                className={`card transition-all ${
-                  player.is_ready 
-                    ? 'bg-green-50 border-green-300' 
-                    : 'bg-white'
-                }`}
-                style={{ padding: '16px' }}
+                className="card transition-all"
+                style={{ 
+                  padding: '16px',
+                  background: player.is_ready ? '#E8F5E9' : '#FFFFFF',
+                  border: player.is_ready ? '2px solid #00B900' : '1px solid #E5E7EB',
+                  transform: player.is_ready ? 'scale(1.02)' : 'scale(1)',
+                  boxShadow: player.is_ready ? '0 4px 12px rgba(0, 185, 0, 0.15)' : '0 1px 3px rgba(0, 0, 0, 0.1)'
+                }}
               >
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '12px' }}>
                   <div style={{
-                    fontSize: '40px',
-                    flexShrink: 0
+                    fontSize: '48px',
+                    flexShrink: 0,
+                    transition: 'all 0.3s ease'
                   }}>
-                    👤
+                    {player.is_ready ? '✅' : '👤'}
                   </div>
                   <div style={{ minWidth: 0, width: '100%' }}>
-                    <div className="font-bold text-gray-900" style={{ fontSize: '16px', marginBottom: '8px', wordBreak: 'break-word' }}>{player.nickname}</div>
+                    <div className="font-bold" style={{ 
+                      fontSize: '16px', 
+                      marginBottom: '8px', 
+                      wordBreak: 'break-word',
+                      color: player.is_ready ? '#00B900' : '#111827'
+                    }}>
+                      {player.nickname}
+                    </div>
                     <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: '4px', flexWrap: 'wrap', marginBottom: '8px' }}>
                       {room.host_id === player.user_id && (
                         <span className="badge badge-yellow" style={{ fontSize: '10px' }}>
@@ -387,14 +418,15 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
                     </div>
                     <div style={{
                       display: 'inline-block',
-                      padding: '4px 12px',
-                      borderRadius: '12px',
-                      fontSize: '12px',
+                      padding: '6px 14px',
+                      borderRadius: '16px',
+                      fontSize: '13px',
                       fontWeight: 'bold',
-                      background: player.is_ready ? '#00B900' : '#E5E7EB',
-                      color: player.is_ready ? 'white' : '#9CA3AF'
+                      background: player.is_ready ? '#00B900' : '#9CA3AF',
+                      color: 'white',
+                      transition: 'all 0.3s ease'
                     }}>
-                      {player.is_ready ? '준비완료' : '대기중'}
+                      {player.is_ready ? '✓ 준비완료' : '대기중'}
                     </div>
                   </div>
                 </div>
