@@ -15,6 +15,7 @@ function LobbyContent() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [rooms, setRooms] = useState<Room[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [selectedGameType, setSelectedGameType] = useState<'liar' | 'mafia' | null>(null);
   const router = useRouter();
@@ -35,12 +36,28 @@ function LobbyContent() {
         'postgres_changes',
         { event: '*', schema: 'public', table: 'rooms' },
         () => {
+          console.log('Room changes detected');
+          fetchRooms();
+        }
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'room_players' },
+        () => {
+          console.log('Room players changed');
           fetchRooms();
         }
       )
       .subscribe();
 
+    // 폴링 추가
+    const pollingInterval = setInterval(() => {
+      console.log('Polling rooms...');
+      fetchRooms();
+    }, 5000); // 5초마다
+
     return () => {
+      clearInterval(pollingInterval);
       supabase.removeChannel(roomsChannel);
     };
   }, []);
@@ -73,12 +90,16 @@ function LobbyContent() {
 
   const fetchRooms = async () => {
     try {
+      console.log('Fetching rooms...');
+      
       // 방 목록 가져오기
       const { data: roomsData, error: roomsError } = await supabase
         .from('rooms')
         .select('*')
         .in('status', ['waiting', 'playing'])
         .order('created_at', { ascending: false });
+
+      console.log('Rooms data:', roomsData, 'Error:', roomsError);
 
       if (roomsError) throw roomsError;
 
@@ -95,14 +116,24 @@ function LobbyContent() {
             return { ...room, player_count: 0 };
           }
 
-          return { ...room, player_count: playersData?.length || 0 };
+          const playerCount = playersData?.length || 0;
+          console.log(`Room ${room.name}: ${playerCount} players`);
+          return { ...room, player_count: playerCount };
         })
       );
       
+      console.log('Final rooms with players:', roomsWithPlayers);
       setRooms(roomsWithPlayers);
     } catch (error) {
       console.error('Error fetching rooms:', error);
     }
+  };
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    console.log('Manual refresh triggered');
+    await fetchRooms();
+    setTimeout(() => setRefreshing(false), 500); // 최소 0.5초 표시
   };
 
   const handleBackToGames = () => {
@@ -146,12 +177,27 @@ function LobbyContent() {
             <h1 className="text-2xl font-bold text-gray-900">{gameEmoji} {gameTitle}</h1>
           </div>
           <button 
-            onClick={fetchRooms}
+            onClick={handleRefresh}
+            disabled={refreshing}
             className="p-2 text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
             style={{ marginRight: '-8px' }}
             title="새로고침"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              width="24" 
+              height="24" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="2" 
+              strokeLinecap="round" 
+              strokeLinejoin="round"
+              style={{ 
+                animation: refreshing ? 'spin 1s linear infinite' : 'none',
+                transformOrigin: 'center'
+              }}
+            >
               <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
             </svg>
           </button>
