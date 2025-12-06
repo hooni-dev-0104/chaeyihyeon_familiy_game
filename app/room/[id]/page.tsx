@@ -106,6 +106,8 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
 
   const fetchPlayers = async () => {
     try {
+      console.log('Fetching players for room:', roomId);
+      
       const { data, error } = await supabase
         .from('room_players')
         .select(`
@@ -113,6 +115,8 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
           profiles:user_id (nickname)
         `)
         .eq('room_id', roomId);
+
+      console.log('Players data:', data, 'Error:', error);
 
       if (error) throw error;
 
@@ -125,11 +129,14 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
         joined_at: p.joined_at,
       }));
 
+      console.log('Processed players list:', playersList);
+
       setPlayers(playersList);
       
       if (user) {
         const me = playersList.find(p => p.user_id === user.id);
         setMyPlayer(me || null);
+        console.log('My player:', me);
       }
     } catch (error) {
       console.error('Error fetching players:', error);
@@ -138,20 +145,38 @@ export default function RoomPage({ params }: { params: Promise<{ id: string }> }
 
   const joinRoom = async (userId: string) => {
     try {
-      const { data: existing } = await supabase
+      console.log('Attempting to join room:', roomId, 'User:', userId);
+      
+      const { data: existing, error: checkError } = await supabase
         .from('room_players')
         .select('*')
         .eq('room_id', roomId)
         .eq('user_id', userId)
         .single();
 
+      console.log('Existing player check:', existing, 'Error:', checkError);
+
       if (!existing) {
-        await supabase.from('room_players').insert({
-          room_id: roomId,
-          user_id: userId,
-          is_ready: false,
-        });
-        await fetchPlayers();
+        console.log('Player not found, inserting...');
+        const { data: insertData, error: insertError } = await supabase
+          .from('room_players')
+          .insert({
+            room_id: roomId,
+            user_id: userId,
+            is_ready: false,
+          })
+          .select();
+        
+        console.log('Insert result:', insertData, 'Error:', insertError);
+        
+        if (insertError) {
+          console.error('Failed to insert player:', insertError);
+        } else {
+          console.log('Player joined successfully!');
+          await fetchPlayers();
+        }
+      } else {
+        console.log('Player already in room');
       }
     } catch (error) {
       console.error('Error joining room:', error);

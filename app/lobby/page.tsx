@@ -73,18 +73,33 @@ function LobbyContent() {
 
   const fetchRooms = async () => {
     try {
-      const { data, error } = await supabase
+      // 방 목록 가져오기
+      const { data: roomsData, error: roomsError } = await supabase
         .from('rooms')
-        .select(`
-          *,
-          room_players(count)
-        `)
+        .select('*')
         .in('status', ['waiting', 'playing'])
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (roomsError) throw roomsError;
+
+      // 각 방의 플레이어 수 가져오기
+      const roomsWithPlayers = await Promise.all(
+        (roomsData || []).map(async (room) => {
+          const { data: playersData, error: playersError } = await supabase
+            .from('room_players')
+            .select('user_id')
+            .eq('room_id', room.id);
+
+          if (playersError) {
+            console.error('Error fetching players for room:', room.id, playersError);
+            return { ...room, player_count: 0 };
+          }
+
+          return { ...room, player_count: playersData?.length || 0 };
+        })
+      );
       
-      setRooms(data || []);
+      setRooms(roomsWithPlayers);
     } catch (error) {
       console.error('Error fetching rooms:', error);
     }
@@ -117,17 +132,29 @@ function LobbyContent() {
     <div className="layout-container safe-area animate-fade-in" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '16px', paddingTop: '16px', paddingBottom: '16px' }}>
         {/* 헤더 */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <button 
+              onClick={handleBackToGames} 
+              className="p-2 text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
+              style={{ marginLeft: '-8px' }}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+              </svg>
+            </button>
+            <h1 className="text-2xl font-bold text-gray-900">{gameEmoji} {gameTitle}</h1>
+          </div>
           <button 
-            onClick={handleBackToGames} 
+            onClick={fetchRooms}
             className="p-2 text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
-            style={{ marginLeft: '-8px' }}
+            style={{ marginRight: '-8px' }}
+            title="새로고침"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M19 12H5M12 19l-7-7 7-7"/>
+              <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
             </svg>
           </button>
-          <h1 className="text-2xl font-bold text-gray-900">{gameEmoji} {gameTitle}</h1>
         </div>
 
         {/* 방 목록 */}
@@ -155,7 +182,7 @@ function LobbyContent() {
                         <span className="badge badge-gray">진행중</span>
                       )}
                       <span className="text-sm text-gray-600 font-semibold">
-                        {(room as any).room_players?.[0]?.count || 0} / {room.max_players}명
+                        {(room as any).player_count || 0} / {room.max_players}명
                       </span>
                     </div>
                   </div>
