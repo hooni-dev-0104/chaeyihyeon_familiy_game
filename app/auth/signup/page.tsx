@@ -19,6 +19,27 @@ export default function SignupPage() {
     e.preventDefault();
     setError('');
 
+    // 필수 필드 검증
+    if (!nickname.trim()) {
+      setError('닉네임을 입력해주세요.');
+      return;
+    }
+
+    if (!email.trim()) {
+      setError('이메일을 입력해주세요.');
+      return;
+    }
+
+    if (!password) {
+      setError('비밀번호를 입력해주세요.');
+      return;
+    }
+
+    if (!confirmPassword) {
+      setError('비밀번호 확인을 입력해주세요.');
+      return;
+    }
+
     if (password !== confirmPassword) {
       setError('비밀번호가 일치하지 않습니다.');
       return;
@@ -80,54 +101,54 @@ export default function SignupPage() {
         <form onSubmit={handleSignup} className="flex flex-col w-full">
           <div className="input-container" style={{ marginBottom: '48px' }}>
             <div className="input-group">
-              <label className="input-label">닉네임</label>
+              <label className="input-label">닉네임 <span className="text-red-500">*</span></label>
               <input
                 type="text"
                 value={nickname}
                 onChange={(e) => setNickname(e.target.value)}
                 required
                 className="input"
-                placeholder="게임에서 사용할 이름"
+                placeholder="게임에서 사용할 이름 (필수)"
                 autoComplete="nickname"
               />
             </div>
 
             <div className="input-group">
-              <label className="input-label">이메일</label>
+              <label className="input-label">이메일 <span className="text-red-500">*</span></label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 className="input"
-                placeholder="이메일을 입력하세요"
+                placeholder="이메일을 입력하세요 (필수)"
                 autoComplete="email"
                 inputMode="email"
               />
             </div>
 
             <div className="input-group">
-              <label className="input-label">비밀번호</label>
+              <label className="input-label">비밀번호 <span className="text-red-500">*</span></label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 className="input"
-                placeholder="최소 6자 이상"
+                placeholder="최소 6자 이상 (필수)"
                 autoComplete="new-password"
               />
             </div>
 
             <div className="input-group">
-              <label className="input-label">비밀번호 확인</label>
+              <label className="input-label">비밀번호 확인 <span className="text-red-500">*</span></label>
               <input
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
                 className="input"
-                placeholder="비밀번호를 다시 입력하세요"
+                placeholder="비밀번호를 다시 입력하세요 (필수)"
                 autoComplete="new-password"
               />
             </div>
@@ -154,6 +175,10 @@ export default function SignupPage() {
             )}
           </button>
         </form>
+
+        <div className="text-center text-xs text-gray-400" style={{ marginTop: '24px' }}>
+          <span className="text-red-500">*</span> 표시는 필수 입력 항목입니다
+        </div>
       </div>
     </div>
   );
