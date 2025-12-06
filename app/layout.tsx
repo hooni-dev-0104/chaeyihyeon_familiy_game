@@ -12,7 +12,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  themeColor: "#667eea",
+  themeColor: "#FEE500",
 };
 
 export default function RootLayout({
@@ -23,8 +23,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className="antialiased min-h-screen" style={{
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
-        backgroundAttachment: 'fixed'
+        background: '#FAFAFA'
       }}>
         {children}
       </body>

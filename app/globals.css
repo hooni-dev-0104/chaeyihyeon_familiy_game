@@ -4,27 +4,30 @@
 @tailwind components;
 @tailwind utilities;
 
-/* CSS 변수 정의 */
+/* CSS 변수 정의 - 카카오/라인 스타일 */
 :root {
-  /* 게임별 색상 */
-  --liar-primary: #10b981;
-  --liar-secondary: #3b82f6;
-  --liar-gradient: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+  /* 메인 색상 */
+  --kakao-yellow: #FEE500;
+  --kakao-brown: #3C1E1E;
+  --line-green: #00B900;
   
-  --mafia-primary: #a855f7;
-  --mafia-secondary: #ef4444;
-  --mafia-gradient: linear-gradient(135deg, #a855f7 0%, #ef4444 100%);
+  /* 중립 색상 */
+  --gray-50: #F9FAFB;
+  --gray-100: #F3F4F6;
+  --gray-200: #E5E7EB;
+  --gray-300: #D1D5DB;
+  --gray-400: #9CA3AF;
+  --gray-500: #6B7280;
+  --gray-600: #4B5563;
+  --gray-700: #374151;
+  --gray-800: #1F2937;
+  --gray-900: #111827;
   
-  /* 기본 색상 */
-  --primary: #6366f1;
-  --primary-dark: #4f46e5;
-  --success: #10b981;
-  --warning: #f59e0b;
-  --danger: #ef4444;
-  
-  /* 배경 */
-  --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --bg-light: #fafbfc;
+  /* 상태 색상 */
+  --success: #00B900;
+  --danger: #FF3B30;
+  --warning: #FF9500;
+  --info: #007AFF;
 }
 
 * {
@@ -34,19 +37,20 @@
 }
 
 body {
-  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
-  color: #1a1a1a;
+  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--gray-900);
   -webkit-text-size-adjust: 100%;
   overflow-x: hidden;
+  background: #FAFAFA;
 }
 
 button, a {
   min-height: 44px;
-  -webkit-tap-highlight-color: rgba(0,0,0,0.1);
+  -webkit-tap-highlight-color: rgba(0,0,0,0.05);
 }
 
 /* ============================================
-   애니메이션 Keyframes
+   애니메이션 Keyframes - Subtle
    ============================================ */
 
 @keyframes fade-in {
@@ -61,7 +65,7 @@ button, a {
 @keyframes slide-up {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -72,53 +76,11 @@ button, a {
 @keyframes scale-in {
   from {
     opacity: 0;
-    transform: scale(0.9);
+    transform: scale(0.95);
   }
   to {
     opacity: 1;
     transform: scale(1);
-  }
-}
-
-@keyframes bounce-subtle {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-5px);
-  }
-}
-
-@keyframes pulse-glow {
-  0%, 100% {
-    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4);
-  }
-  50% {
-    box-shadow: 0 0 0 10px rgba(99, 102, 241, 0);
-  }
-}
-
-@keyframes wiggle {
-  0%, 100% {
-    transform: rotate(0deg);
-  }
-  25% {
-    transform: rotate(-5deg);
-  }
-  75% {
-    transform: rotate(5deg);
-  }
-}
-
-@keyframes shake {
-  0%, 100% {
-    transform: translateX(0);
-  }
-  25% {
-    transform: translateX(-10px);
-  }
-  75% {
-    transform: translateX(10px);
   }
 }
 
@@ -133,52 +95,15 @@ button, a {
    ============================================ */
 
 .animate-fade-in {
-  animation: fade-in 0.5s ease-out;
+  animation: fade-in 0.3s ease-out;
 }
 
 .animate-slide-up {
-  animation: slide-up 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .animate-scale-in {
-  animation: scale-in 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.animate-bounce-subtle {
-  animation: bounce-subtle 0.6s ease-in-out;
-}
-
-.animate-pulse-glow {
-  animation: pulse-glow 2s infinite;
-}
-
-.animate-wiggle {
-  animation: wiggle 0.5s ease-in-out;
-}
-
-.animate-shake {
-  animation: shake 0.5s ease-in-out;
-}
-
-/* 순차 애니메이션을 위한 delay */
-.animate-delay-1 {
-  animation-delay: 0.1s;
-  animation-fill-mode: backwards;
-}
-
-.animate-delay-2 {
-  animation-delay: 0.2s;
-  animation-fill-mode: backwards;
-}
-
-.animate-delay-3 {
-  animation-delay: 0.3s;
-  animation-fill-mode: backwards;
-}
-
-.animate-delay-4 {
-  animation-delay: 0.4s;
-  animation-fill-mode: backwards;
+  animation: scale-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ============================================
@@ -187,46 +112,24 @@ button, a {
 
 .card {
   background: white;
-  border-radius: 24px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-  border: 1px solid rgba(0,0,0,0.04);
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  border: 1px solid var(--gray-200);
   overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.2s ease;
 }
 
 .card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
 }
 
 .card-interactive {
   cursor: pointer;
-  will-change: transform;
 }
 
 .card-interactive:active {
-  transform: translateY(-2px) scale(0.98);
-}
-
-/* 게임별 카드 스타일 */
-.card-liar {
-  border: 2px solid transparent;
-  background: linear-gradient(white, white) padding-box,
-              var(--liar-gradient) border-box;
-}
-
-.card-liar:hover {
-  box-shadow: 0 12px 40px rgba(16, 185, 129, 0.3);
-}
-
-.card-mafia {
-  border: 2px solid transparent;
-  background: linear-gradient(white, white) padding-box,
-              var(--mafia-gradient) border-box;
-}
-
-.card-mafia:hover {
-  box-shadow: 0 12px 40px rgba(168, 85, 247, 0.3);
+  transform: translateY(0) scale(0.98);
 }
 
 /* ============================================
@@ -234,93 +137,66 @@ button, a {
    ============================================ */
 
 .btn {
-  border-radius: 16px;
-  font-weight: 700;
+  border-radius: 12px;
+  font-weight: 600;
   font-size: 16px;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.2s ease;
   border: none;
   cursor: pointer;
-  min-height: 54px;
+  min-height: 52px;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0 24px;
   width: 100%;
-  position: relative;
-  overflow: hidden;
-  will-change: transform;
-}
-
-.btn::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
-  transform: translate(-50%, -50%);
-  transition: width 0.6s, height 0.6s;
-}
-
-.btn:active::before {
-  width: 300px;
-  height: 300px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  background: var(--kakao-yellow);
+  color: var(--kakao-brown);
+  font-weight: 700;
 }
 
 .btn-primary:hover {
-  box-shadow: 0 8px 30px rgba(102, 126, 234, 0.5);
-  transform: translateY(-2px);
+  background: #FFE500;
+  box-shadow: 0 2px 8px rgba(254, 229, 0, 0.3);
 }
 
 .btn-primary:active {
-  transform: translateY(0) scale(0.98);
+  transform: scale(0.98);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 
 .btn-secondary {
   background: white;
-  color: #667eea;
-  border: 2px solid #e5e7eb;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  color: var(--gray-700);
+  border: 1px solid var(--gray-300);
 }
 
 .btn-secondary:hover {
-  border-color: #667eea;
-  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.2);
-  transform: translateY(-2px);
+  background: var(--gray-50);
+  border-color: var(--gray-400);
 }
 
 .btn-secondary:active {
-  transform: translateY(0) scale(0.98);
+  transform: scale(0.98);
 }
 
-.btn-liar {
-  background: var(--liar-gradient);
+.btn-success {
+  background: var(--line-green);
   color: white;
-  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+  font-weight: 700;
 }
 
-.btn-liar:hover {
-  box-shadow: 0 8px 30px rgba(16, 185, 129, 0.5);
-  transform: translateY(-2px);
+.btn-success:hover {
+  background: #00A000;
 }
 
-.btn-mafia {
-  background: var(--mafia-gradient);
+.btn-danger {
+  background: var(--danger);
   color: white;
-  box-shadow: 0 6px 20px rgba(168, 85, 247, 0.4);
-}
-
-.btn-mafia:hover {
-  box-shadow: 0 8px 30px rgba(168, 85, 247, 0.5);
-  transform: translateY(-2px);
+  font-weight: 700;
 }
 
 /* ============================================
@@ -329,43 +205,38 @@ button, a {
 
 .input-group {
   background: white;
-  border-radius: 20px;
-  padding: 18px 22px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.06);
-  border: 2px solid #f0f0f0;
+  border-radius: 12px;
+  padding: 16px 20px;
+  border: 1px solid var(--gray-300);
   display: flex;
   flex-direction: column;
   gap: 8px;
   width: 100%;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .input-group:focus-within {
-  border-color: #667eea;
-  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.15);
-  transform: translateY(-2px);
+  border-color: var(--kakao-yellow);
+  box-shadow: 0 0 0 3px rgba(254, 229, 0, 0.1);
 }
 
 .input-label {
   font-size: 13px;
-  font-weight: 700;
-  color: #667eea;
+  font-weight: 600;
+  color: var(--gray-700);
   display: block;
-  margin-left: 4px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
 .input {
-  background: #fafbfc;
-  border: 2px solid #e5e7eb;
-  border-radius: 12px;
+  background: var(--gray-50);
+  border: 1px solid var(--gray-200);
+  border-radius: 8px;
   padding: 0 16px;
   font-size: 16px;
   width: 100%;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   -webkit-appearance: none;
-  color: #1f2937;
+  color: var(--gray-900);
   height: 48px;
   font-weight: 500;
 }
@@ -373,12 +244,12 @@ button, a {
 .input:focus {
   background: white;
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+  border-color: var(--kakao-yellow);
+  box-shadow: 0 0 0 2px rgba(254, 229, 0, 0.1);
 }
 
 .input::placeholder {
-  color: #9ca3af;
+  color: var(--gray-400);
   font-weight: 400;
 }
 
@@ -387,9 +258,9 @@ button, a {
    ============================================ */
 
 .layout-container {
-  max-width: 420px;
+  max-width: 460px;
   margin: 0 auto;
-  padding: 24px;
+  padding: 20px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -400,22 +271,10 @@ button, a {
   justify-content: center;
 }
 
-.section-gap {
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-}
-
 .content-gap {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-}
-
-.form-gap {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+  gap: 16px;
 }
 
 /* ============================================
@@ -425,42 +284,35 @@ button, a {
 .badge {
   display: inline-flex;
   align-items: center;
-  padding: 6px 14px;
-  border-radius: 20px;
+  padding: 4px 10px;
+  border-radius: 12px;
   font-size: 12px;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.badge-green {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  color: white;
-  box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3);
 }
 
 .badge-yellow {
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-  color: white;
-  box-shadow: 0 2px 10px rgba(245, 158, 11, 0.3);
+  background: var(--kakao-yellow);
+  color: var(--kakao-brown);
 }
 
-.badge-red {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+.badge-green {
+  background: var(--line-green);
   color: white;
-  box-shadow: 0 2px 10px rgba(239, 68, 68, 0.3);
+}
+
+.badge-gray {
+  background: var(--gray-200);
+  color: var(--gray-700);
 }
 
 .badge-blue {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-  color: white;
-  box-shadow: 0 2px 10px rgba(59, 130, 246, 0.3);
+  background: #E3F2FD;
+  color: #1976D2;
 }
 
 .badge-purple {
-  background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%);
-  color: white;
-  box-shadow: 0 2px 10px rgba(168, 85, 247, 0.3);
+  background: #F3E5F5;
+  color: #7B1FA2;
 }
 
 /* ============================================
@@ -470,8 +322,8 @@ button, a {
 .spinner {
   width: 40px;
   height: 40px;
-  border: 4px solid rgba(102, 126, 234, 0.2);
-  border-top-color: #667eea;
+  border: 3px solid var(--gray-200);
+  border-top-color: var(--kakao-yellow);
   border-radius: 50%;
   animation: spinner 0.8s linear infinite;
 }
@@ -479,7 +331,17 @@ button, a {
 .spinner-small {
   width: 20px;
   height: 20px;
-  border-width: 3px;
+  border-width: 2px;
+}
+
+/* ============================================
+   구분선
+   ============================================ */
+
+.divider {
+  height: 1px;
+  background: var(--gray-200);
+  margin: 16px 0;
 }
 
 /* ============================================
@@ -487,16 +349,8 @@ button, a {
    ============================================ */
 
 .safe-area {
-  padding-top: max(24px, env(safe-area-inset-top));
-  padding-bottom: max(24px, env(safe-area-inset-bottom));
-}
-
-.safe-top {
-  padding-top: env(safe-area-inset-top);
-}
-
-.safe-bottom {
-  padding-bottom: env(safe-area-inset-bottom);
+  padding-top: max(20px, env(safe-area-inset-top));
+  padding-bottom: max(20px, env(safe-area-inset-bottom));
 }
 
 /* ============================================
@@ -513,7 +367,7 @@ button, a {
 }
 
 /* ============================================
-   접근성: 모션 감소 선호
+   접근성
    ============================================ */
 
 @media (prefers-reduced-motion: reduce) {

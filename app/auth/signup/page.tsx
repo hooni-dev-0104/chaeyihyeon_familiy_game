@@ -62,81 +62,77 @@ export default function SignupPage() {
 
   return (
     <div className="layout-container layout-center safe-area animate-fade-in">
-      <div className="section-gap">
+      <div className="content-gap max-w-md mx-auto w-full">
         {/* 헤더 */}
-        <div className="text-center py-4 relative w-full animate-scale-in">
+        <div className="text-center py-6 relative w-full">
           <Link 
             href="/" 
-            className="absolute left-0 top-1/2 -translate-y-1/2 p-3 -ml-2 text-white hover:bg-white/20 rounded-full transition-all duration-300 hover:scale-110"
+            className="absolute left-0 top-1/2 -translate-y-1/2 p-2 -ml-2 text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M15 18l-6-6 6-6"/>
             </svg>
           </Link>
-          <div className="text-5xl mb-3 animate-wiggle">✨</div>
-          <h1 className="text-2xl font-bold text-white drop-shadow-lg">회원가입</h1>
-          <p className="text-white/90 text-sm mt-2 drop-shadow">가족과 함께할 준비를 해볼까요?</p>
+          <h1 className="text-2xl font-bold text-gray-900">회원가입</h1>
         </div>
 
         {/* 입력 폼 */}
-        <form onSubmit={handleSignup} className="flex flex-col gap-6 w-full">
-          <div className="flex flex-col gap-5 w-full">
-            <div className="input-group animate-slide-up animate-delay-1">
-              <label className="input-label">닉네임</label>
-              <input
-                type="text"
-                value={nickname}
-                onChange={(e) => setNickname(e.target.value)}
-                required
-                className="input"
-                placeholder="게임에서 사용할 이름"
-                autoComplete="nickname"
-              />
-            </div>
+        <form onSubmit={handleSignup} className="flex flex-col gap-4 w-full">
+          <div className="input-group">
+            <label className="input-label">닉네임</label>
+            <input
+              type="text"
+              value={nickname}
+              onChange={(e) => setNickname(e.target.value)}
+              required
+              className="input"
+              placeholder="게임에서 사용할 이름"
+              autoComplete="nickname"
+            />
+          </div>
 
-            <div className="input-group animate-slide-up animate-delay-2">
-              <label className="input-label">이메일</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="input"
-                placeholder="이메일을 입력하세요"
-                autoComplete="email"
-                inputMode="email"
-              />
-            </div>
+          <div className="input-group">
+            <label className="input-label">이메일</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="input"
+              placeholder="이메일을 입력하세요"
+              autoComplete="email"
+              inputMode="email"
+            />
+          </div>
 
-            <div className="input-group animate-slide-up animate-delay-3">
-              <label className="input-label">비밀번호</label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="input"
-                placeholder="최소 6자 이상"
-                autoComplete="new-password"
-              />
-            </div>
+          <div className="input-group">
+            <label className="input-label">비밀번호</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="input"
+              placeholder="최소 6자 이상"
+              autoComplete="new-password"
+            />
+          </div>
 
-            <div className="input-group animate-slide-up animate-delay-4">
-              <label className="input-label">비밀번호 확인</label>
-              <input
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-                className="input"
-                placeholder="비밀번호를 다시 입력하세요"
-                autoComplete="new-password"
-              />
-            </div>
+          <div className="input-group">
+            <label className="input-label">비밀번호 확인</label>
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+              className="input"
+              placeholder="비밀번호를 다시 입력하세요"
+              autoComplete="new-password"
+            />
           </div>
 
           {error && (
-            <div className="p-4 bg-red-50 border-2 border-red-200 rounded-2xl text-red-600 text-sm text-center font-bold w-full animate-shake">
+            <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm text-center font-semibold">
               {error}
             </div>
           )}
@@ -152,7 +148,7 @@ export default function SignupPage() {
                 <span>가입 중...</span>
               </div>
             ) : (
-              '가입 완료하기 🚀'
+              '가입하기'
             )}
           </button>
         </form>
