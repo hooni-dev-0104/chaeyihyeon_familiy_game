@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -8,10 +8,20 @@ import Link from 'next/link';
 export default function Home() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [rememberEmail, setRememberEmail] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const supabase = createClient();
+
+  // 페이지 로드 시 저장된 이메일 불러오기
+  useEffect(() => {
+    const savedEmail = localStorage.getItem('rememberedEmail');
+    if (savedEmail) {
+      setEmail(savedEmail);
+      setRememberEmail(true);
+    }
+  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,6 +35,13 @@ export default function Home() {
       });
 
       if (error) throw error;
+
+      // 이메일 기억하기 설정 저장
+      if (rememberEmail) {
+        localStorage.setItem('rememberedEmail', email);
+      } else {
+        localStorage.removeItem('rememberedEmail');
+      }
 
       if (data.user) {
         router.push('/games');
@@ -49,7 +66,7 @@ export default function Home() {
 
         {/* 로그인 폼 */}
         <form onSubmit={handleLogin} className="flex flex-col w-full">
-          <div className="input-container" style={{ marginBottom: '48px' }}>
+          <div className="input-container" style={{ marginBottom: '24px' }}>
             <div className="input-group">
               <label className="input-label">이메일</label>
               <input
@@ -76,6 +93,21 @@ export default function Home() {
                 autoComplete="current-password"
               />
             </div>
+          </div>
+
+          {/* 이메일 기억하기 체크박스 */}
+          <div className="flex items-center gap-2 px-1" style={{ marginBottom: '32px' }}>
+            <input
+              type="checkbox"
+              id="rememberEmail"
+              checked={rememberEmail}
+              onChange={(e) => setRememberEmail(e.target.checked)}
+              className="w-4 h-4 rounded border-gray-300 text-kakao-yellow focus:ring-kakao-yellow cursor-pointer"
+              style={{ accentColor: '#FEE500' }}
+            />
+            <label htmlFor="rememberEmail" className="text-sm text-gray-600 cursor-pointer select-none">
+              이메일 기억하기
+            </label>
           </div>
 
           {error && (
